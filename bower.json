@@ -1,0 +1,27 @@
+{
+  "name": "statemanager",
+  "version": "0.0.1",
+  "homepage": "https://github.com/athletics/statemanager",
+  "authors": [
+    "Athletics"
+  ],
+  "description": "Where have we been? Where are we going?",
+  "main": "StateManager.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "push",
+    "state"
+  ],
+  "license": "Apache2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
