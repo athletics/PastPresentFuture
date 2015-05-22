@@ -9,6 +9,7 @@
 
         define( [
             './Util',
+            './Config',
             './State',
             './Loading',
             './Ajax',
@@ -19,6 +20,7 @@
 
         module.exports = factory(
             require( './Util' ),
+            require( './Config' ),
             require( './State' ),
             require( './Loading' ),
             require( './Ajax' ),
@@ -31,6 +33,7 @@
 
         root.StateManager = factory(
             _StateManager.Util,
+            _StateManager.Config,
             _StateManager.State,
             _StateManager.Loading,
             _StateManager.Ajax,
@@ -43,11 +46,13 @@
 
     'use strict';
 
-    function StateManager() {
+    function StateManager( newConfig ) {
 
-        var debug = Util.debug;
+        newConfig = newConfig || false;
 
         Util.init();
+
+        Config.init( newConfig );
 
         State.init();
 
@@ -58,6 +63,7 @@
     }
 
     StateManager.prototype.Util = Util;
+    StateManager.prototype.Config = Config;
     StateManager.prototype.State = State;
     StateManager.prototype.Loading = Loading;
     StateManager.prototype.Ajax = Ajax;

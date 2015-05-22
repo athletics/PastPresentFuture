@@ -13,6 +13,7 @@
         define( [
             'jquery',
             './Util',
+            './Config',
             './State'
         ], factory );
 
@@ -21,6 +22,7 @@
         module.exports = factory(
             require( 'jquery' ),
             require( './Util' ),
+            require( './Config' ),
             require( './State' )
         );
 
@@ -31,6 +33,7 @@
         root.StateManager.Ajax = factory(
             root.jQuery,
             root.StateManager.Util,
+            root.StateManager.Config,
             root.StateManager.State
         );
 
@@ -183,7 +186,7 @@
      */
     function parseHtml( data ) {
 
-        var marker = '.page_content_holder';
+        var marker = Config.get( 'content' );
 
         data = $.parseHTML( data, document, true );
         data = $( data );
