@@ -30,7 +30,7 @@
 
     }
 
-} ( this, function factory( $ ) {
+} ( this, function ( $ ) {
 
     'use strict';
 
@@ -38,14 +38,6 @@
         debugEnabled = true,
         debug
     ;
-
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    function init() {
-
-        initArrayRemove();
-
-    }
 
     //////////////////////////////////////////////////////////////////////////////////////
 
@@ -87,22 +79,6 @@
         }
 
         return url;
-
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Sets up a prototype for removing an element from an array
-     */
-    function initArrayRemove() {
-
-        // Array Remove - By John Resig (MIT Licensed)
-        Array.prototype.remove = function(from, to) {
-            var rest = this.slice((to || from) + 1 || this.length);
-            this.length = from < 0 ? this.length + from : from;
-            return this.push.apply(this, rest);
-        };
 
     }
 
@@ -156,7 +132,6 @@
     //////////////////////////////////////////////////////////////////////////////////////
 
     return {
-        init: init,
         debug: debug,
         fullyQualifyUrl: fullyQualifyUrl,
         setDocumentTitle: setDocumentTitle,
