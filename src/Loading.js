@@ -33,7 +33,7 @@
 
     }
 
-} ( this, function factory( $, Util ) {
+} ( this, function ( $, Util ) {
 
     // define any private variables
     var name = 'Loading',

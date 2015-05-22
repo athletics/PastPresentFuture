@@ -36,7 +36,7 @@
 
     }
 
-} ( this, function factory( $, Util, Ajax ) {
+} ( this, function ( $, Util, Ajax ) {
 
     'use strict';
 

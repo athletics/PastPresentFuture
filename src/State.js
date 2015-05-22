@@ -33,7 +33,7 @@
 
     }
 
-} ( this, function factory( $, Util ) {
+} ( this, function ( $, Util ) {
 
     'use strict';
 

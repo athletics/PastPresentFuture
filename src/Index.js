@@ -42,7 +42,7 @@
 
     }
 
-} ( this, function factory( Util, State, Loading, Ajax, Manager ) {
+} ( this, function ( Util, Config, State, Loading, Ajax, Manager ) {
 
     'use strict';
 

@@ -39,7 +39,7 @@
 
     }
 
-} ( this, function factory( $, Util, State ) {
+} ( this, function ( $, Util, Config, State ) {
 
     'use strict';
 
