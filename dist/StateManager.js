@@ -648,57 +648,12 @@
      */
     function parseHtml( data ) {
 
-        // Perform parse of ajax content
-        data = parseAjaxContent(
-            data,
-            'page_content'
-        );
+        var marker = '.page_content_holder';
 
-        return data;
+        data = $.parseHTML( data, document, true );
+        data = $( data );
 
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-    *   parseAjaxContent()
-    *       Returns content between html comments matching a particular marker. We use this
-    *       to get a specific chunk of html within a larger document.
-    */
-
-    function parseAjaxContent( data, marker ) {
-
-        var startMarker = '<!-- start:' + marker + ' -->',
-            endMarker = '<!-- end:' + marker + ' -->',
-
-            startMarkerOpen = '<!-- start:' + marker,
-            endMarkerOpen = 'end:' + marker + ' -->',
-
-            startIndex = data.indexOf( startMarker ),
-            endIndex = data.indexOf( endMarker ),
-
-            content = ''
-        ;
-
-        if ( startIndex === -1 || endIndex === -1 ) {
-
-            // test against the open markers
-
-            startMarker = startMarkerOpen;
-            endMarker = endMarkerOpen;
-
-            startIndex = data.indexOf( startMarker );
-            endIndex = data.indexOf( endMarker );
-
-        }
-
-        if ( startIndex == -1 || endIndex == -1 ) {
-            return '';
-        }
-
-        content = data.substring( ( startIndex + startMarker.length ), endIndex );
-
-        return content;
+        return data.filter( marker ).add( data.find( marker ) );
 
     }
 
@@ -800,7 +755,6 @@
     return {
         loadAjax: loadAjax,
         parseHtml: parseHtml,
-        parseAjaxContent: parseAjaxContent,
         ajaxifyLinks: ajaxifyLinks
     };
 
