@@ -2,6 +2,7 @@
   "name": "statemanager",
   "version": "0.0.1",
   "description": "Where have we been? Where are we going?",
+  "main": "src/Index.js",
   "repository": {
     "type": "git",
     "url": "https://rossluebe@github.com/athletics/statemanager.git"
