@@ -7,14 +7,10 @@
 
 	<?php include_once 'includes/nav.html'; ?>
 
-	<div class="page_content_holder">
-		<!-- start:page_content -->
-		<div class="content" data-config="">
+	<div class="page_content_holder" data-config="">
 
-			<iframe width="560" height="315" src="https://www.youtube.com/embed/Dd7FixvoKBw" frameborder="0" allowfullscreen></iframe>
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/Dd7FixvoKBw" frameborder="0" allowfullscreen></iframe>
 
-		</div>
-		<!-- end:page_content -->
 	</div>
 
 	<?php include_once 'includes/scripts.html'; ?>
