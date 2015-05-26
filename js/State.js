@@ -59,7 +59,7 @@
             scrollTarget = 0
         ;
 
-        if ( typeof state.scrollTarget !== 'undefined' && $( state.scrollTarget ).length > 0 )  {
+        if ( state !== null && typeof state.scrollTarget !== 'undefined' && $( state.scrollTarget ).length > 0 )  {
             scrollTarget = $( state.scrollTarget ).first().offset().top;
         }
 
