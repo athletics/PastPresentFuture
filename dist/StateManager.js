@@ -16,7 +16,7 @@
 
     if ( typeof define === 'function' && define.amd ) {
 
-        define( 'src/Util',[
+        define( 'js/Util',[
             'jquery'
         ], factory );
 
@@ -67,6 +67,12 @@
     //////////////////////////////////////////////////////////////////////////////////////
 
     function fullyQualifyUrl( url ) {
+
+        var bypass = true;
+
+        if ( bypass ) {
+            return url;
+        }
 
         if ( url.indexOf( 'http://' ) === -1 &&
             url.indexOf( 'http://localhost:8000/' ) === -1 &&
@@ -155,7 +161,7 @@
 
     if ( typeof define === 'function' && define.amd ) {
 
-        define( 'src/Config',[
+        define( 'js/Config',[
             'jquery',
             './Util'
         ], factory );
@@ -251,7 +257,7 @@
 
     if ( typeof define === 'function' && define.amd ) {
 
-        define( 'src/State',[
+        define( 'js/State',[
             'jquery',
             './Util'
         ], factory );
@@ -300,7 +306,7 @@
             scrollTarget = 0
         ;
 
-        if ( typeof state.scrollTarget !== 'undefined' && $( state.scrollTarget ).length > 0 )  {
+        if ( state !== null && typeof state.scrollTarget !== 'undefined' && $( state.scrollTarget ).length > 0 )  {
             scrollTarget = $( state.scrollTarget ).first().offset().top;
         }
 
@@ -438,7 +444,7 @@
 
     if ( typeof define === 'function' && define.amd ) {
 
-        define( 'src/Loading',[
+        define( 'js/Loading',[
             'jquery',
             './Util'
         ], factory );
@@ -544,7 +550,7 @@
 
     if ( typeof define === 'function' && define.amd ) {
 
-        define( 'src/Ajax',[
+        define( 'js/Ajax',[
             'jquery',
             './Util',
             './Config',
@@ -739,10 +745,10 @@
 
             if ( url.indexOf( 'mailto:' ) !== -1 ) {
                 return false;
-            } else if ( url.indexOf( 'localhost' ) !== -1 ) {
-                return true;
-            } else if ( url.indexOf( ':' ) !== -1 ) {
-                return false;
+            // } else if ( url.indexOf( 'localhost' ) !== -1 ) {
+            //     return true;
+            // } else if ( url.indexOf( ':' ) !== -1 ) {
+            //     return false;
             }
 
             return true;
@@ -843,10 +849,11 @@
 
     if ( typeof define === 'function' && define.amd ) {
 
-        define( 'src/Manager',[
+        define( 'js/Manager',[
             'jquery',
             './Util',
-            './Ajax'
+            './Config',
+            './Ajax',
         ], factory );
 
     } else if ( typeof exports === 'object' ) {
@@ -854,6 +861,7 @@
         module.exports = factory(
             require( 'jquery' ),
             require( './Util' ),
+            require( './Config' ),
             require( './Ajax' )
         );
 
@@ -864,12 +872,13 @@
         root.StateManager.Manager = factory(
             root.jQuery,
             root.StateManager.Util,
+            root.StateManager.Config,
             root.StateManager.Ajax
         );
 
     }
 
-} ( this, function ( $, Util, Ajax ) {
+} ( this, function ( $, Util, Config, Ajax ) {
 
     'use strict';
 
@@ -963,7 +972,7 @@
 
         var isInitLoad = false,
             stateInfo = history.state,
-            pageConfig = $( 'div.content' ).data( 'config' ),
+            pageConfig = $( Config.get( 'content' ) ).data( 'config' ),
             pageTitle = ''
         ;
 
@@ -1102,7 +1111,7 @@
                     // an ajax load.
 
                     // record what the last url had been
-                    var lastUrlInQueue = ajaxQueue[ ajaxQueue.length - 1 ];
+                    var lastUrlInQueue = ajaxQueue[ ajaxQueue.length - 1 ].url;
 
                     removeUrlFromAjaxQueue( thisUrl );
 
@@ -1309,7 +1318,7 @@
 
     if ( typeof define === 'function' && define.amd ) {
 
-        define( 'src/Index',[
+        define( 'js/Index',[
             './Util',
             './Config',
             './State',
@@ -1351,8 +1360,6 @@
     function StateManager( newConfig ) {
 
         newConfig = newConfig || false;
-
-        Util.init();
 
         Config.init( newConfig );
 
