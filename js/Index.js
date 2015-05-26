@@ -50,8 +50,6 @@
 
         newConfig = newConfig || false;
 
-        Util.init();
-
         Config.init( newConfig );
 
         State.init();
