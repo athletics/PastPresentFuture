@@ -13,7 +13,8 @@
         define( [
             'jquery',
             './Util',
-            './Ajax'
+            './Config',
+            './Ajax',
         ], factory );
 
     } else if ( typeof exports === 'object' ) {
@@ -21,6 +22,7 @@
         module.exports = factory(
             require( 'jquery' ),
             require( './Util' ),
+            require( './Config' ),
             require( './Ajax' )
         );
 
@@ -31,12 +33,13 @@
         root.StateManager.Manager = factory(
             root.jQuery,
             root.StateManager.Util,
+            root.StateManager.Config,
             root.StateManager.Ajax
         );
 
     }
 
-} ( this, function ( $, Util, Ajax ) {
+} ( this, function ( $, Util, Config, Ajax ) {
 
     'use strict';
 
@@ -130,7 +133,7 @@
 
         var isInitLoad = false,
             stateInfo = history.state,
-            pageConfig = $( 'div.content' ).data( 'config' ),
+            pageConfig = $( Config.get( 'content' ) ).data( 'config' ),
             pageTitle = ''
         ;
 
@@ -269,7 +272,7 @@
                     // an ajax load.
 
                     // record what the last url had been
-                    var lastUrlInQueue = ajaxQueue[ ajaxQueue.length - 1 ];
+                    var lastUrlInQueue = ajaxQueue[ ajaxQueue.length - 1 ].url;
 
                     removeUrlFromAjaxQueue( thisUrl );
 
