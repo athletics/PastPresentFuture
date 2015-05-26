@@ -205,10 +205,10 @@
 
             if ( url.indexOf( 'mailto:' ) !== -1 ) {
                 return false;
-            } else if ( url.indexOf( 'localhost' ) !== -1 ) {
-                return true;
-            } else if ( url.indexOf( ':' ) !== -1 ) {
-                return false;
+            // } else if ( url.indexOf( 'localhost' ) !== -1 ) {
+            //     return true;
+            // } else if ( url.indexOf( ':' ) !== -1 ) {
+            //     return false;
             }
 
             return true;
