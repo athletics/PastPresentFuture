@@ -17,6 +17,8 @@
     "gulp": "^3.8.11",
     "gulp-cli": "^0.2.0",
     "gulp-watch": "^4.2.4",
-    "requirejs": "^2.1.17"
+    "requirejs": "^2.1.17",
+    "gulp-minify-css": "^1.1.1",
+    "gulp-rename": "^1.2.2"
   }
 }
