@@ -62,6 +62,12 @@
 
     function fullyQualifyUrl( url ) {
 
+        var bypass = true;
+
+        if ( bypass ) {
+            return url;
+        }
+
         if ( url.indexOf( 'http://' ) === -1 &&
             url.indexOf( 'http://localhost:8000/' ) === -1 &&
             url.substring( 0, 1 ) === '/') {
