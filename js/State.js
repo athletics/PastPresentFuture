@@ -173,6 +173,8 @@
                 url
             );
 
+            $window.trigger( 'StateManager.NewState' );
+
         }
 
     }
