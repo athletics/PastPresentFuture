@@ -50,22 +50,20 @@
 
         $window
             .on(
-                name + '.Reveal',
+                'StateManager.LoadingReveal',
                 reveal
             )
             .on(
-                name + '.Complete',
+                'StateManager.LoadingComplete',
                 hide
             )
             .on(
-                name + '.Progress',
+                'StateManager.LoadingProgress',
                 onLoadingProgress
             )
         ;
 
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////
 
     function onLoadingProgress( e, options ) {
 
@@ -83,13 +81,9 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
     function reveal() {
         $html.addClass( 'is-loading-ajax' );
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////
 
     function hide() {
         $html.removeClass( 'is-loading-ajax' );

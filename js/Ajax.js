@@ -113,7 +113,7 @@
 
     function onUploadProgress( event ) {
         $window.trigger(
-            'Loading.Progress',
+            'StateManager.LoadingProgress',
             {
                 event: event,
                 type: 'upload'
@@ -127,7 +127,7 @@
             largestDownloadedLength = event.loaded;
         }
         $window.trigger(
-            'Loading.Progress',
+            'StateManager.LoadingProgress',
             {
                 event: event,
                 type: 'download'
@@ -273,7 +273,7 @@
                     }
                 );
 
-                $window.trigger( 'StateManager.gotoUrl', url );
+                $window.trigger( 'StateManager.GotoUrl', url );
 
                 $this.addClass( 'ajax-initialized' );
 
