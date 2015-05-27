@@ -60,11 +60,11 @@
         currentPageConfig = {},
         prefetchCache = {
             list: [],
-            limit: Config.get( 'prefetchCacheLimit' )
+            limit: null
         },
         ajaxCache = {
             list: [],
-            limit: Config.get( 'ajaxCacheLimit' )
+            limit: null
         },
         ajaxQueue = []
     ;
@@ -76,6 +76,9 @@
         if ( initialized ) {
             return;
         }
+
+        prefetchCache.limit = Config.get( 'prefetchCacheLimit' );
+        ajaxCache.limit = Config.get( 'ajaxCacheLimit' );
 
         $contentHolder = $( Config.get( 'content' ) ).first();
 
