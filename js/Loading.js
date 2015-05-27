@@ -1,10 +1,10 @@
 /**
  * Ajax.js
- * @param  {[type]} root    [description]
+ * @param  {[type]} window    [description]
  * @param  {[type]} factory [description]
  * @return {[type]}         [description]
  */
-( function ( root, factory ) {
+( function ( window, factory ) {
 
     'use strict';
 
@@ -13,27 +13,31 @@
         define( [
             'jquery',
             './Util'
-        ], factory );
+        ], function ( $, Util ) {
+            return factory( window, $, Util );
+        } );
 
     } else if ( typeof exports === 'object' ) {
 
         module.exports = factory(
+            window,
             require( 'jquery' ),
             require( './Util' )
         );
 
     } else {
 
-        root.StateManager = root.StateManager || {};
+        window.StateManager = window.StateManager || {};
 
-        root.StateManager.Loading = factory(
-            root.jQuery,
-            root.StateManager.Util
+        window.StateManager.Loading = factory(
+            window,
+            window.jQuery,
+            window.StateManager.Util
         );
 
     }
 
-} ( this, function ( $, Util ) {
+} ( window, function ( window, $, Util ) {
 
     // define any private variables
     var name = 'Loading',

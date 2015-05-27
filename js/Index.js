@@ -1,7 +1,7 @@
 /**
  * Bootstrap.js
  */
-( function ( root, factory ) {
+( function ( window, factory ) {
 
     'use strict';
 
@@ -29,9 +29,9 @@
 
     } else {
 
-        var _StateManager = root.StateManager;
+        var _StateManager = window.StateManager;
 
-        root.StateManager = factory(
+        window.StateManager = factory(
             _StateManager.Util,
             _StateManager.Config,
             _StateManager.State,
@@ -42,7 +42,7 @@
 
     }
 
-} ( this, function ( Util, Config, State, Loading, Ajax, Manager ) {
+} ( window, function ( Util, Config, State, Loading, Ajax, Manager ) {
 
     'use strict';
 

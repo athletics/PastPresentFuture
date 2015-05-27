@@ -1,10 +1,10 @@
 /**
  * Manager.js
  *
- * @param  {Object} root    Window
+ * @param  {Object} window    Window
  * @param  {[type]} factory [description]
  */
-( function ( root, factory ) {
+( function ( window, factory ) {
 
     'use strict';
 
@@ -15,11 +15,14 @@
             './Util',
             './Config',
             './Ajax',
-        ], factory );
+        ], function ( $, Util, Config, Ajax ) {
+            return factory( window, $, Util, Config, Ajax );
+        } );
 
     } else if ( typeof exports === 'object' ) {
 
         module.exports = factory(
+            window,
             require( 'jquery' ),
             require( './Util' ),
             require( './Config' ),
@@ -28,18 +31,19 @@
 
     } else {
 
-        root.StateManager = root.StateManager || {};
+        window.StateManager = window.StateManager || {};
 
-        root.StateManager.Manager = factory(
-            root.jQuery,
-            root.StateManager.Util,
-            root.StateManager.Config,
-            root.StateManager.Ajax
+        window.StateManager.Manager = factory(
+            window,
+            window.jQuery,
+            window.StateManager.Util,
+            window.StateManager.Config,
+            window.StateManager.Ajax
         );
 
     }
 
-} ( this, function ( $, Util, Config, Ajax ) {
+} ( window, function ( window, $, Util, Config, Ajax ) {
 
     'use strict';
 

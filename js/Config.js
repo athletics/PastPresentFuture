@@ -1,10 +1,10 @@
 /**
  * Config
- * @param  {[type]} root    [description]
+ * @param  {[type]} window    [description]
  * @param  {[type]} factory [description]
  * @return {[type]}         [description]
  */
-( function ( root, factory ) {
+( function ( window, factory ) {
 
     if ( typeof define === 'function' && define.amd ) {
 
@@ -22,16 +22,16 @@
 
     } else {
 
-        root.StateManager = root.StateManager || {};
+        window.StateManager = window.StateManager || {};
 
-        root.StateManager.Config = factory(
-            root.jQuery,
-            root.StateManager.Util
+        window.StateManager.Config = factory(
+            window.jQuery,
+            window.StateManager.Util
         );
 
     }
 
-} ( this, function ( $, Util ) {
+} ( window, function ( $, Util ) {
 
     var name = 'Config',
         debugEnabled = true,

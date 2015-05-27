@@ -1,10 +1,10 @@
 /**
  * Util.js
- * @param  {[type]} root    [description]
+ * @param  {[type]} window    [description]
  * @param  {[type]} factory [description]
  * @return {[type]}         [description]
  */
-( function ( root, factory ) {
+( function ( window, factory ) {
 
     'use strict';
 
@@ -12,25 +12,29 @@
 
         define( [
             'jquery'
-        ], factory );
+        ], function ( $ ) {
+            return factory( window, $ );
+        } );
 
     } else if ( typeof exports === 'object' ) {
 
         module.exports = factory(
+            window,
             require( 'jquery' )
         );
 
     } else {
 
-        root.StateManager = root.StateManager || {};
+        window.StateManager = window.StateManager || {};
 
-        root.StateManager.Util = factory(
-            root.jQuery
+        window.StateManager.Util = factory(
+            window,
+            window.jQuery
         );
 
     }
 
-} ( this, function ( $ ) {
+} ( window, function ( window, $ ) {
 
     'use strict';
 
