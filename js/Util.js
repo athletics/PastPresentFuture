@@ -122,6 +122,11 @@
 
     //////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Does the browser support window.history and push state.
+     *
+     * @return {String} Browser mode
+     */
     function getMode() {
 
         if ( ! window.history || ! window.history.pushState || ! window.history.replaceState ) {
