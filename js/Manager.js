@@ -278,7 +278,7 @@
                     saveCacheData( ajaxCache, thisUrl, data );
 
                     // only proceed if this was the last url in the queue
-                    if ( lastUrlInQueue == thisUrl ) {
+                    if ( lastUrlInQueue === thisUrl ) {
 
                         // now that we have the data, recall gotoUrl
                         gotoUrl( thisUrl, thisOptions );
@@ -361,7 +361,7 @@
     /**
      * Prefetches URLs we think the user is likely to load in the cache.
      *
-     * @param  {String} url Marker to decide which pages should be cached
+     * @param {String} url Marker to decide which pages should be cached
      */
     function prefetchUrl( url ) {
 
@@ -385,8 +385,7 @@
      *
      * @param  {Array} cacheList  prefetch, ajax, or ajaxQueue cache
      * @param  {String} url       used to identify the correct data in the loop
-     * @return {Object}           cacheList data if present
-     * @return {Boolean}          false if no data in cache
+     * @return {Object|Boolean}   cacheList data if present or false
      */
     function checkCacheForData( cacheList, url ) {
 
