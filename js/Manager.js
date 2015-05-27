@@ -235,12 +235,12 @@
         if ( isLoading ) {
 
             // reveal loading state
-            $window.trigger( 'Loading.Reveal' );
+            $window.trigger( 'StateManager.LoadingReveal' );
 
         } else {
 
             // hide loading state
-            $window.trigger( 'Loading.Complete' );
+            $window.trigger( 'StateManager.LoadingComplete' );
 
         }
 
@@ -463,7 +463,7 @@
      */
     function ajaxEventListener() {
 
-        $window.on( 'StateManager.gotoUrl', function ( event, url ) {
+        $window.on( 'StateManager.GotoUrl', function ( event, url ) {
 
             gotoUrl( url, {} );
 
