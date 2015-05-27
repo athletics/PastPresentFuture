@@ -201,7 +201,9 @@
     function init( newConfig ) {
 
         config = $.extend( {
-            content: '.page_content_holder'
+            content: '.page_content_holder',
+            prefetchCacheLimit: 15,
+            ajaxCacheLimit: 15
         }, newConfig );
 
     }
@@ -420,6 +422,8 @@
                 url
             );
 
+            $window.trigger( 'StateManager.NewState' );
+
         }
 
     }
@@ -484,22 +488,20 @@
 
         $window
             .on(
-                name + '.Reveal',
+                'StateManager.LoadingReveal',
                 reveal
             )
             .on(
-                name + '.Complete',
+                'StateManager.LoadingComplete',
                 hide
             )
             .on(
-                name + '.Progress',
+                'StateManager.LoadingProgress',
                 onLoadingProgress
             )
         ;
 
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////
 
     function onLoadingProgress( e, options ) {
 
@@ -517,13 +519,9 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
     function reveal() {
         $html.addClass( 'is-loading-ajax' );
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////
 
     function hide() {
         $html.removeClass( 'is-loading-ajax' );
@@ -653,7 +651,7 @@
 
     function onUploadProgress( event ) {
         $window.trigger(
-            'Loading.Progress',
+            'StateManager.LoadingProgress',
             {
                 event: event,
                 type: 'upload'
@@ -667,7 +665,7 @@
             largestDownloadedLength = event.loaded;
         }
         $window.trigger(
-            'Loading.Progress',
+            'StateManager.LoadingProgress',
             {
                 event: event,
                 type: 'download'
@@ -813,7 +811,7 @@
                     }
                 );
 
-                $window.trigger( 'StateManager.gotoUrl', url );
+                $window.trigger( 'StateManager.GotoUrl', url );
 
                 $this.addClass( 'ajax-initialized' );
 
@@ -839,9 +837,9 @@
 } ) );
 /**
  * Manager.js
- * @param  {[type]} root    [description]
+ *
+ * @param  {Object} root    Window
  * @param  {[type]} factory [description]
- * @return {[type]}         [description]
  */
 ( function ( root, factory ) {
 
@@ -895,11 +893,11 @@
         currentPageConfig = {},
         prefetchCache = {
             list: [],
-            limit: 15
+            limit: Config.get( 'prefetchCacheLimit' )
         },
         ajaxCache = {
             list: [],
-            limit: 15
+            limit: Config.get( 'ajaxCacheLimit' )
         },
         ajaxQueue = []
     ;
@@ -912,7 +910,7 @@
             return;
         }
 
-        $contentHolder = $( '.page_content_holder' ).first();
+        $contentHolder = $( Config.get( 'content' ) ).first();
 
         if ( $contentHolder.length < 1 ) {
             return;
@@ -930,8 +928,9 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Set up history object and add popstate event listener
+     */
     function initHistory() {
 
         // set up our private alias to the history.js adapter
@@ -959,14 +958,11 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Initializes whatever state has been loaded
      * (either on page load or on a history push.)
      *
-     * @param  {[type]} options [description]
-     * @return {[type]}         [description]
+     * @param  {Object} options
      */
     function initState( options ) {
 
@@ -1018,8 +1014,9 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Loop through anchor tags with data-prefetch added
+     */
     function prefetchUpcomingUrls() {
 
         if ( mode !== 'dynamic' ) {
@@ -1031,9 +1028,9 @@
         // stagger prefetch of additional URLs
         $( 'a[data-prefetch]' ).each( function ( index ) {
 
-            if ( index > prefetchCache.limit ) {
-                return false;
-            }
+            // if ( index > prefetchCache.limit ) {
+            //     return false;
+            // }
 
             var thisHref = Util.fullyQualifyUrl( $( this ).attr( 'href' ) );
 
@@ -1047,13 +1044,12 @@
         });
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-    *   renderUrl( data, options )
-    *       Inserts url data to the DOM. Called by gotoUrl().
-    */
-
+    /**
+     * Inserts url data to the DOM. Called by gotoUrl().
+     *
+     * @param  {Object} data
+     * @param  {Object} options
+     */
     function renderUrl( data, options ) {
 
         // drop in image_box HTML
@@ -1065,36 +1061,33 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-    *   toggleLoading( isLoading )
-    *       Toggles whether we're waiting for content to load.
-    */
-
+    /**
+     * Toggles whether we're waiting for content to load.
+     *
+     * @param  {Boolean} isLoading
+     */
     function toggleLoading( isLoading ) {
 
         if ( isLoading ) {
 
             // reveal loading state
-            $window.trigger( 'Loading.Reveal' );
+            $window.trigger( 'StateManager.LoadingReveal' );
 
         } else {
 
             // hide loading state
-            $window.trigger( 'Loading.Complete' );
+            $window.trigger( 'StateManager.LoadingComplete' );
 
         }
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-    *   gotoUrl( url, options  )
-    *       Handles loading of a particular url, then moves along to rendering
-    */
-
+    /**
+     * Handles loading of a particular url, then moves along to rendering.
+     *
+     * @param  {String} url
+     * @param  {Object} options
+     */
     function gotoUrl( url, options ) {
 
         // set empty options if they don't exist
@@ -1147,14 +1140,13 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-    *   getUrlData( options )
-    *       Returns html data for a particular url. This data may be cached already. If not
-    *       we make an AJAX call to load the data.
-    */
-
+    /**
+     * Returns html data for a particular url. This data may be cached already. If not
+     *       we make an AJAX call to load the data.
+     *
+     * @param  {Object} options Includes: url, isPrefetch
+     * @return {Object}         Trigger the loading function
+     */
     function getUrlData( options ) {
 
         var thisUrl = options.url,
@@ -1200,32 +1192,15 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-    *   prefetchUrl( url )
-    *       Prefetches URLs we think the user is likely to load in the cache.
-    */
-
+    /**
+     * Prefetches URLs we think the user is likely to load in the cache.
+     *
+     * @param  {String} url Marker to decide which pages should be cached
+     */
     function prefetchUrl( url ) {
 
         if ( mode === 'traditional' ) {
             return;
-        }
-
-        // is the url already in the cache?
-        if ( checkCacheForData( ajaxCache.list, url ) ) {
-            return true;
-        }
-
-        // check if the data exists in the prefetch cache
-        if ( checkCacheForData( prefetchCache.list, url ) ) {
-            return true;
-        }
-
-        // check if the url is already in ajaxQueue
-        if ( checkCacheForData( ajaxQueue, url ) ) {
-            return true;
         }
 
         // no, let's make the request
@@ -1239,8 +1214,14 @@
         });
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Check supplied cache array for a match against the URI
+     *
+     * @param  {Array} cacheList  prefetch, ajax, or ajaxQueue cache
+     * @param  {String} url       used to identify the correct data in the loop
+     * @return {Object}           cacheList data if present
+     * @return {Boolean}          false if no data in cache
+     */
     function checkCacheForData( cacheList, url ) {
 
         if ( cacheList.length > 0 ) {
@@ -1255,8 +1236,13 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * A function for passing different cache arrays with url and data to save
+     *
+     * @param  {Array} cacheType  prefetch or ajax cache
+     * @param  {String} url       Page URI to cache
+     * @param  {String} data      Data from page to be cached, it get's parsed first
+     */
     function saveCacheData( cacheType, url, data ) {
 
         var cacheObj = {
@@ -1279,8 +1265,11 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Loop through the queue and remove the url from the array
+     *
+     * @param  {String} url  string to remove from the queue
+     */
     function removeUrlFromAjaxQueue( url ) {
 
         // remove url from ajaxQueue
@@ -1290,11 +1279,12 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Add any Listeners to avoid exposing functions
+     */
     function ajaxEventListener() {
 
-        $window.on( 'StateManager.gotoUrl', function ( event, url ) {
+        $window.on( 'StateManager.GotoUrl', function ( event, url ) {
 
             gotoUrl( url, {} );
 
