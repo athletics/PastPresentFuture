@@ -125,8 +125,7 @@
      * Initializes whatever state has been loaded
      * (either on page load or on a history push.)
      *
-     * @param  {[type]} options [description]
-     * @return {[type]}         [description]
+     * @param  {Object} options
      */
     function initState( options ) {
 
