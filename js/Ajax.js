@@ -183,19 +183,36 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Responsible for processing HTML content coming off the server.
+     * @param  {String} data Full page HTML blob
+     * @return {}      [description]
      */
     function parseHtml( data ) {
 
-        var marker = Config.get( 'content' );
+        var marker = Config.get( 'content' ),
+            $data
+        ;
 
         data = $.parseHTML( data, document, true );
-        data = $( data );
+        $data = $( data );
 
-        return data.filter( marker ).add( data.find( marker ) );
+        return $data.filter( marker ).add( $data.find( marker ) );
+
+    }
+
+    function parseTitle( data ) {
+
+        var $data,
+            titles
+        ;
+
+        data = $.parseHTML( data.match( /<head[^>]*>([\s\S.]*)<\/head>/i )[0], document, true );
+        $data = $( data );
+
+        titles = $data.filter( 'title' );
+
+        return titles.last().text();
 
     }
 
@@ -297,6 +314,7 @@
     return {
         loadAjax: loadAjax,
         parseHtml: parseHtml,
+        parseTitle: parseTitle,
         ajaxifyLinks: ajaxifyLinks
     };
 
