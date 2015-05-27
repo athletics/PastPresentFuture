@@ -73,7 +73,7 @@
             return;
         }
 
-        $contentHolder = $( '.page_content_holder' ).first();
+        $contentHolder = $( Config.get( 'content' ) ).first();
 
         if ( $contentHolder.length < 1 ) {
             return;
