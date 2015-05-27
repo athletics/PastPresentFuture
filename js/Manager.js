@@ -366,21 +366,6 @@
             return;
         }
 
-        // is the url already in the cache?
-        if ( checkCacheForData( ajaxCache.list, url ) ) {
-            return true;
-        }
-
-        // check if the data exists in the prefetch cache
-        if ( checkCacheForData( prefetchCache.list, url ) ) {
-            return true;
-        }
-
-        // check if the url is already in ajaxQueue
-        if ( checkCacheForData( ajaxQueue, url ) ) {
-            return true;
-        }
-
         // no, let's make the request
         getUrlData({
             url: url,
