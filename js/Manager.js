@@ -412,6 +412,7 @@
 
         var cacheObj = {
             url: url,
+            title: Ajax.parseTitle( data ),
             data: Ajax.parseHtml( data )
         };
 
