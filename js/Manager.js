@@ -302,7 +302,7 @@
         // if we reached this point, we have the data we need and can proceed.
         toggleLoading( false );
 
-        renderUrl( data, options );
+        renderUrl( data );
 
     }
 
