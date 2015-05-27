@@ -56,11 +56,11 @@
         currentPageConfig = {},
         prefetchCache = {
             list: [],
-            limit: 15
+            limit: Config.get( 'prefetchCacheLimit' )
         },
         ajaxCache = {
             list: [],
-            limit: 15
+            limit: Config.get( 'ajaxCacheLimit' )
         },
         ajaxQueue = []
     ;

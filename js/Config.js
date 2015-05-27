@@ -48,7 +48,9 @@
     function init( newConfig ) {
 
         config = $.extend( {
-            content: '.page_content_holder'
+            content: '.page_content_holder',
+            prefetchCacheLimit: 15,
+            ajaxCacheLimit: 15
         }, newConfig );
 
     }
