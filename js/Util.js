@@ -131,7 +131,7 @@
 
     function getMode() {
 
-        if ( ! window.history && window.history.pushState && window.history.replaceState ) {
+        if ( ! window.history || ! window.history.pushState || ! window.history.replaceState ) {
             return 'traditional';
         }
 
