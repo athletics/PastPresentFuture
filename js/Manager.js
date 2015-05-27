@@ -1,8 +1,8 @@
 /**
  * Manager.js
- * @param  {[type]} root    [description]
+ *
+ * @param  {Object} root    Window
  * @param  {[type]} factory [description]
- * @return {[type]}         [description]
  */
 ( function ( root, factory ) {
 
@@ -91,8 +91,9 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Set up history object and add popstate event listener
+     */
     function initHistory() {
 
         // set up our private alias to the history.js adapter
@@ -119,8 +120,6 @@
         } );
 
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Initializes whatever state has been loaded
@@ -179,8 +178,9 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Loop through anchor tags with data-prefetch added
+     */
     function prefetchUpcomingUrls() {
 
         if ( mode !== 'dynamic' ) {
@@ -208,13 +208,12 @@
         });
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-    *   renderUrl( data, options )
-    *       Inserts url data to the DOM. Called by gotoUrl().
-    */
-
+    /**
+     * Inserts url data to the DOM. Called by gotoUrl().
+     *
+     * @param  {Object} data
+     * @param  {Object} options
+     */
     function renderUrl( data, options ) {
 
         // drop in image_box HTML
@@ -226,13 +225,11 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-    *   toggleLoading( isLoading )
-    *       Toggles whether we're waiting for content to load.
-    */
-
+    /**
+     * Toggles whether we're waiting for content to load.
+     *
+     * @param  {Boolean} isLoading
+     */
     function toggleLoading( isLoading ) {
 
         if ( isLoading ) {
@@ -249,13 +246,12 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-    *   gotoUrl( url, options  )
-    *       Handles loading of a particular url, then moves along to rendering
-    */
-
+    /**
+     * Handles loading of a particular url, then moves along to rendering.
+     *
+     * @param  {String} url
+     * @param  {Object} options
+     */
     function gotoUrl( url, options ) {
 
         // set empty options if they don't exist
@@ -308,14 +304,13 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-    *   getUrlData( options )
-    *       Returns html data for a particular url. This data may be cached already. If not
-    *       we make an AJAX call to load the data.
-    */
-
+    /**
+     * Returns html data for a particular url. This data may be cached already. If not
+     *       we make an AJAX call to load the data.
+     *
+     * @param  {Object} options Includes: url, isPrefetch
+     * @return {Object}         Trigger the loading function
+     */
     function getUrlData( options ) {
 
         var thisUrl = options.url,
@@ -361,13 +356,11 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-    *   prefetchUrl( url )
-    *       Prefetches URLs we think the user is likely to load in the cache.
-    */
-
+    /**
+     * Prefetches URLs we think the user is likely to load in the cache.
+     *
+     * @param  {String} url Marker to decide which pages should be cached
+     */
     function prefetchUrl( url ) {
 
         if ( mode === 'traditional' ) {
@@ -400,8 +393,14 @@
         });
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Check supplied cache array for a match against the URI
+     *
+     * @param  {Array} cacheList  prefetch, ajax, or ajaxQueue cache
+     * @param  {String} url       used to identify the correct data in the loop
+     * @return {Object}           cacheList data if present
+     * @return {Boolean}          false if no data in cache
+     */
     function checkCacheForData( cacheList, url ) {
 
         if ( cacheList.length > 0 ) {
@@ -416,8 +415,13 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * A function for passing different cache arrays with url and data to save
+     *
+     * @param  {Array} cacheType  prefetch or ajax cache
+     * @param  {String} url       Page URI to cache
+     * @param  {String} data      Data from page to be cached, it get's parsed first
+     */
     function saveCacheData( cacheType, url, data ) {
 
         var cacheObj = {
@@ -440,8 +444,11 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Loop through the queue and remove the url from the array
+     *
+     * @param  {String} url  string to remove from the queue
+     */
     function removeUrlFromAjaxQueue( url ) {
 
         // remove url from ajaxQueue
@@ -451,8 +458,9 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Add any Listeners to avoid exposing functions
+     */
     function ajaxEventListener() {
 
         $window.on( 'StateManager.gotoUrl', function ( event, url ) {
