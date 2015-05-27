@@ -89,7 +89,7 @@
         initHistory();
 
         initState({
-            isInitLoad : true
+            isInitLoad: true
         });
 
         ajaxEventListener();
