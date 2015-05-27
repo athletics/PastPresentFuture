@@ -216,14 +216,14 @@
      * @param  {Object} data
      * @param  {Object} options
      */
-    function renderUrl( data, options ) {
+    function renderUrl( data ) {
 
         // drop in image_box HTML
         $contentHolder.html( data.data );
 
         Ajax.ajaxifyLinks( $contentHolder );
 
-        initState();
+        initState( data );
 
     }
 
