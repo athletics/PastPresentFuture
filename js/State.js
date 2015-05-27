@@ -55,8 +55,9 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Decide where to focus the page after push state
+     */
     function newState() {
 
         var state = window.history.state,
@@ -161,8 +162,13 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Handle how the page updates depending on the browser's use of history
+     *
+     * @param  {String} title   page title for the upcoming page
+     * @param  {String} url     uri for upcoming page
+     * @param  {Object} options passed into the history state object
+     */
     function pushState( title, url, options ) {
 
         if ( Util.getMode() === 'traditional' ) {
