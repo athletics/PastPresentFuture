@@ -6,11 +6,11 @@
  * @version 0.0.1
  *//**
  * Util.js
- * @param  {[type]} root    [description]
+ * @param  {[type]} window    [description]
  * @param  {[type]} factory [description]
  * @return {[type]}         [description]
  */
-( function ( root, factory ) {
+( function ( window, factory ) {
 
     'use strict';
 
@@ -18,25 +18,29 @@
 
         define( 'js/Util',[
             'jquery'
-        ], factory );
+        ], function ( $ ) {
+            return factory( window, $ );
+        } );
 
     } else if ( typeof exports === 'object' ) {
 
         module.exports = factory(
+            window,
             require( 'jquery' )
         );
 
     } else {
 
-        root.StateManager = root.StateManager || {};
+        window.StateManager = window.StateManager || {};
 
-        root.StateManager.Util = factory(
-            root.jQuery
+        window.StateManager.Util = factory(
+            window,
+            window.jQuery
         );
 
     }
 
-} ( this, function ( $ ) {
+} ( window, function ( window, $ ) {
 
     'use strict';
 
@@ -94,17 +98,9 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
 
     function setDocumentTitle( input ) {
-
-        document.title = htmlDecode( input );
-
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    function htmlDecode( input ) {
 
         var entities = {
             '&amp;': '&',
@@ -126,14 +122,20 @@
             }
         }
 
-        return input;
+        document.title = input;
+
     }
 
     //////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Does the browser support window.history and push state.
+     *
+     * @return {String} Browser mode
+     */
     function getMode() {
 
-        if ( ! window.history && window.history.pushState && window.history.replaceState ) {
+        if ( ! window.history || ! window.history.pushState || ! window.history.replaceState ) {
             return 'traditional';
         }
 
@@ -153,11 +155,11 @@
 } ) );
 /**
  * Config
- * @param  {[type]} root    [description]
+ * @param  {[type]} window    [description]
  * @param  {[type]} factory [description]
  * @return {[type]}         [description]
  */
-( function ( root, factory ) {
+( function ( window, factory ) {
 
     if ( typeof define === 'function' && define.amd ) {
 
@@ -175,16 +177,16 @@
 
     } else {
 
-        root.StateManager = root.StateManager || {};
+        window.StateManager = window.StateManager || {};
 
-        root.StateManager.Config = factory(
-            root.jQuery,
-            root.StateManager.Util
+        window.StateManager.Config = factory(
+            window.jQuery,
+            window.StateManager.Util
         );
 
     }
 
-} ( this, function ( $, Util ) {
+} ( window, function ( $, Util ) {
 
     var name = 'Config',
         debugEnabled = true,
@@ -253,7 +255,7 @@
  * @param  {[type]} factory [description]
  * @return {[type]}         [description]
  */
-( function ( root, factory ) {
+( function ( window, factory ) {
 
     'use strict';
 
@@ -262,27 +264,31 @@
         define( 'js/State',[
             'jquery',
             './Util'
-        ], factory );
+        ], function ( $, Util ) {
+            return factory( window, $, Util );
+        } );
 
     } else if ( typeof exports === 'object' ) {
 
         module.exports = factory(
+            window,
             require( 'jquery' ),
             require( './Util' )
         );
 
     } else {
 
-        root.StateManager = root.StateManager || {};
+        window.StateManager = window.StateManager || {};
 
-        root.StateManager.State = factory(
-            root.jQuery,
-            root.StateManager.Util
+        window.StateManager.State = factory(
+            window,
+            window.jQuery,
+            window.StateManager.Util
         );
 
     }
 
-} ( this, function ( $, Util ) {
+} ( window, function ( window, $, Util ) {
 
     'use strict';
 
@@ -300,8 +306,9 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Decide where to focus the page after push state
+     */
     function newState() {
 
         var state = window.history.state,
@@ -406,8 +413,13 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * Handle how the page updates depending on the browser's use of history
+     *
+     * @param  {String} title   page title for the upcoming page
+     * @param  {String} url     uri for upcoming page
+     * @param  {Object} options passed into the history state object
+     */
     function pushState( title, url, options ) {
 
         if ( Util.getMode() === 'traditional' ) {
@@ -438,11 +450,11 @@
 } ) );
 /**
  * Ajax.js
- * @param  {[type]} root    [description]
+ * @param  {[type]} window    [description]
  * @param  {[type]} factory [description]
  * @return {[type]}         [description]
  */
-( function ( root, factory ) {
+( function ( window, factory ) {
 
     'use strict';
 
@@ -451,27 +463,31 @@
         define( 'js/Loading',[
             'jquery',
             './Util'
-        ], factory );
+        ], function ( $, Util ) {
+            return factory( window, $, Util );
+        } );
 
     } else if ( typeof exports === 'object' ) {
 
         module.exports = factory(
+            window,
             require( 'jquery' ),
             require( './Util' )
         );
 
     } else {
 
-        root.StateManager = root.StateManager || {};
+        window.StateManager = window.StateManager || {};
 
-        root.StateManager.Loading = factory(
-            root.jQuery,
-            root.StateManager.Util
+        window.StateManager.Loading = factory(
+            window,
+            window.jQuery,
+            window.StateManager.Util
         );
 
     }
 
-} ( this, function ( $, Util ) {
+} ( window, function ( window, $, Util ) {
 
     // define any private variables
     var name = 'Loading',
@@ -538,11 +554,11 @@
 } ) );
 /**
  * Ajax.js
- * @param  {[type]} root    [description]
+ * @param  {[type]} window    [description]
  * @param  {[type]} factory [description]
  * @return {[type]}         [description]
  */
-( function ( root, factory ) {
+( function ( window, factory ) {
 
     'use strict';
 
@@ -553,11 +569,14 @@
             './Util',
             './Config',
             './State'
-        ], factory );
+        ], function ( $, Util, Config, State ) {
+            return factory( window, $, Util, Config, State );
+        } );
 
     } else if ( typeof exports === 'object' ) {
 
         module.exports = factory(
+            window,
             require( 'jquery' ),
             require( './Util' ),
             require( './Config' ),
@@ -566,18 +585,19 @@
 
     } else {
 
-        root.StateManager = root.StateManager || {};
+        window.StateManager = window.StateManager || {};
 
-        root.StateManager.Ajax = factory(
-            root.jQuery,
-            root.StateManager.Util,
-            root.StateManager.Config,
-            root.StateManager.State
+        window.StateManager.Ajax = factory(
+            window,
+            window.jQuery,
+            window.StateManager.Util,
+            window.StateManager.Config,
+            window.StateManager.State
         );
 
     }
 
-} ( this, function ( $, Util, Config, State ) {
+} ( window, function ( window, $, Util, Config, State ) {
 
     'use strict';
 
@@ -717,19 +737,36 @@
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Responsible for processing HTML content coming off the server.
+     * @param  {String} data Full page HTML blob
+     * @return {}      [description]
      */
     function parseHtml( data ) {
 
-        var marker = Config.get( 'content' );
+        var marker = Config.get( 'content' ),
+            $data
+        ;
 
         data = $.parseHTML( data, document, true );
-        data = $( data );
+        $data = $( data );
 
-        return data.filter( marker ).add( data.find( marker ) );
+        return $data.filter( marker ).add( $data.find( marker ) );
+
+    }
+
+    function parseTitle( data ) {
+
+        var $data,
+            titles
+        ;
+
+        data = $.parseHTML( data.match( /<head[^>]*>([\s\S.]*)<\/head>/i )[0], document, true );
+        $data = $( data );
+
+        titles = $data.filter( 'title' );
+
+        return titles.last().text();
 
     }
 
@@ -831,6 +868,7 @@
     return {
         loadAjax: loadAjax,
         parseHtml: parseHtml,
+        parseTitle: parseTitle,
         ajaxifyLinks: ajaxifyLinks
     };
 
@@ -838,10 +876,10 @@
 /**
  * Manager.js
  *
- * @param  {Object} root    Window
+ * @param  {Object} window    Window
  * @param  {[type]} factory [description]
  */
-( function ( root, factory ) {
+( function ( window, factory ) {
 
     'use strict';
 
@@ -852,11 +890,14 @@
             './Util',
             './Config',
             './Ajax',
-        ], factory );
+        ], function ( $, Util, Config, Ajax ) {
+            return factory( window, $, Util, Config, Ajax );
+        } );
 
     } else if ( typeof exports === 'object' ) {
 
         module.exports = factory(
+            window,
             require( 'jquery' ),
             require( './Util' ),
             require( './Config' ),
@@ -865,18 +906,19 @@
 
     } else {
 
-        root.StateManager = root.StateManager || {};
+        window.StateManager = window.StateManager || {};
 
-        root.StateManager.Manager = factory(
-            root.jQuery,
-            root.StateManager.Util,
-            root.StateManager.Config,
-            root.StateManager.Ajax
+        window.StateManager.Manager = factory(
+            window,
+            window.jQuery,
+            window.StateManager.Util,
+            window.StateManager.Config,
+            window.StateManager.Ajax
         );
 
     }
 
-} ( this, function ( $, Util, Config, Ajax ) {
+} ( window, function ( window, $, Util, Config, Ajax ) {
 
     'use strict';
 
@@ -893,11 +935,11 @@
         currentPageConfig = {},
         prefetchCache = {
             list: [],
-            limit: Config.get( 'prefetchCacheLimit' )
+            limit: null
         },
         ajaxCache = {
             list: [],
-            limit: Config.get( 'ajaxCacheLimit' )
+            limit: null
         },
         ajaxQueue = []
     ;
@@ -910,6 +952,9 @@
             return;
         }
 
+        prefetchCache.limit = Config.get( 'prefetchCacheLimit' );
+        ajaxCache.limit = Config.get( 'ajaxCacheLimit' );
+
         $contentHolder = $( Config.get( 'content' ) ).first();
 
         if ( $contentHolder.length < 1 ) {
@@ -919,7 +964,7 @@
         initHistory();
 
         initState({
-            isInitLoad : true
+            isInitLoad: true
         });
 
         ajaxEventListener();
@@ -968,30 +1013,26 @@
 
         var isInitLoad = false,
             stateInfo = history.state,
-            pageConfig = $( Config.get( 'content' ) ).data( 'config' ),
-            pageTitle = ''
+            // pageConfig = $( Config.get( 'content' ) ).data( 'config' ),
+            pageTitle = 'title' in options ? options.title : document.title
         ;
 
         if ( typeof options !== 'undefined' && typeof options.isInitLoad !== 'undefined' ) {
             isInitLoad = options.isInitLoad
         }
 
-        if ( typeof pageConfig === 'undefined' ) {
-            return;
-        }
+        // if ( typeof pageConfig === 'undefined' ) {
+        //     return;
+        // }
 
-        if ( pageConfig === null ) {
-            return;
-        }
-
-        if ( typeof pageConfig.title !== 'undefined' ) {
-            pageTitle = pageConfig.title;
-        }
+        // if ( pageConfig === null ) {
+        //     return;
+        // }
 
         // check to see if this page relies on any custom body classes
-        if ( typeof pageConfig.bodyClass !== 'undefined' ) {
-            $body.addClass( pageConfig.bodyClass );
-        }
+        // if ( typeof pageConfig.bodyClass !== 'undefined' ) {
+        //     $body.addClass( pageConfig.bodyClass );
+        // }
 
         Util.setDocumentTitle( pageTitle );
 
@@ -1006,7 +1047,7 @@
         }
 
         // update currentPageConfig
-        currentPageConfig = pageConfig;
+        // currentPageConfig = pageConfig;
 
         prefetchUpcomingUrls();
 
@@ -1050,14 +1091,14 @@
      * @param  {Object} data
      * @param  {Object} options
      */
-    function renderUrl( data, options ) {
+    function renderUrl( data ) {
 
         // drop in image_box HTML
         $contentHolder.html( data.data );
 
         Ajax.ajaxifyLinks( $contentHolder );
 
-        initState();
+        initState( data );
 
     }
 
@@ -1112,7 +1153,7 @@
                     saveCacheData( ajaxCache, thisUrl, data );
 
                     // only proceed if this was the last url in the queue
-                    if ( lastUrlInQueue == thisUrl ) {
+                    if ( lastUrlInQueue === thisUrl ) {
 
                         // now that we have the data, recall gotoUrl
                         gotoUrl( thisUrl, thisOptions );
@@ -1136,7 +1177,7 @@
         // if we reached this point, we have the data we need and can proceed.
         toggleLoading( false );
 
-        renderUrl( data, options );
+        renderUrl( data );
 
     }
 
@@ -1195,7 +1236,7 @@
     /**
      * Prefetches URLs we think the user is likely to load in the cache.
      *
-     * @param  {String} url Marker to decide which pages should be cached
+     * @param {String} url Marker to decide which pages should be cached
      */
     function prefetchUrl( url ) {
 
@@ -1219,8 +1260,7 @@
      *
      * @param  {Array} cacheList  prefetch, ajax, or ajaxQueue cache
      * @param  {String} url       used to identify the correct data in the loop
-     * @return {Object}           cacheList data if present
-     * @return {Boolean}          false if no data in cache
+     * @return {Object|Boolean}   cacheList data if present or false
      */
     function checkCacheForData( cacheList, url ) {
 
@@ -1247,6 +1287,7 @@
 
         var cacheObj = {
             url: url,
+            title: Ajax.parseTitle( data ),
             data: Ajax.parseHtml( data )
         };
 
@@ -1302,7 +1343,7 @@
 /**
  * Bootstrap.js
  */
-( function ( root, factory ) {
+( function ( window, factory ) {
 
     'use strict';
 
@@ -1330,9 +1371,9 @@
 
     } else {
 
-        var _StateManager = root.StateManager;
+        var _StateManager = window.StateManager;
 
-        root.StateManager = factory(
+        window.StateManager = factory(
             _StateManager.Util,
             _StateManager.Config,
             _StateManager.State,
@@ -1343,7 +1384,7 @@
 
     }
 
-} ( this, function ( Util, Config, State, Loading, Ajax, Manager ) {
+} ( window, function ( Util, Config, State, Loading, Ajax, Manager ) {
 
     'use strict';
 
