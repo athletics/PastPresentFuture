@@ -118,7 +118,7 @@
 
             gotoUrl(
                 history.state.url,
-                {}
+                { popstate: true }
             );
 
             $window.trigger( 'StateManager.StateChange' );
@@ -276,6 +276,10 @@
 
         // if we reached this point, we have the data we need and can proceed.
         toggleLoading( false );
+
+        if ( ! options.popstate ) {
+            $window.trigger( 'StateManager.PushState', options );
+        }
 
         renderUrl( data );
 
