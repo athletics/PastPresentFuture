@@ -223,6 +223,8 @@
 
         Ajax.ajaxifyLinks( $contentHolder );
 
+        $body.removeClass().addClass( data.classes );
+
         initState( data );
 
     }
@@ -413,7 +415,8 @@
         var cacheObj = {
             url: url,
             title: Ajax.parseTitle( data ),
-            data: Ajax.parseHtml( data )
+            data: Ajax.parseHtml( data ),
+            classes: data.match(/body\sclass=['|"]([^'|"]*)['|"]/)[1]
         };
 
         cacheType.list.push( cacheObj );
