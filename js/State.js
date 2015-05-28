@@ -53,6 +53,8 @@
 
         $window.on( 'StateManager.AfterInitState', newState );
 
+        $window.on( 'StateManager.PushState', pushState );
+
     }
 
     /**
@@ -164,23 +166,26 @@
 
     /**
      * Handle how the page updates depending on the browser's use of history
-     *
-     * @param  {String} title   page title for the upcoming page
-     * @param  {String} url     uri for upcoming page
-     * @param  {Object} options passed into the history state object
      */
-    function pushState( title, url, options ) {
+    function pushState( event, object ) {
+
+        object = $.extend( {
+            options: {
+                url: object.url
+            },
+            title: ''
+        }, object );
 
         if ( Util.getMode() === 'traditional' ) {
 
-            window.location = url;
+            window.location = object.url;
 
         } else {
 
             window.history.pushState(
-                options,
-                title,
-                url
+                object.options,
+                object.title,
+                object.url
             );
 
             $window.trigger( 'StateManager.NewState' );
