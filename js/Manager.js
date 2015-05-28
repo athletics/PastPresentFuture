@@ -57,7 +57,6 @@
         $contentHolder,
         $window = $( window ),
         $body = $( 'body' ),
-        currentPageConfig = {},
         prefetchCache = {
             list: [],
             limit: null
@@ -138,26 +137,12 @@
 
         var isInitLoad = false,
             stateInfo = history.state,
-            // pageConfig = $( Config.get( 'content' ) ).data( 'config' ),
             pageTitle = 'title' in options ? options.title : document.title
         ;
 
         if ( typeof options !== 'undefined' && typeof options.isInitLoad !== 'undefined' ) {
             isInitLoad = options.isInitLoad
         }
-
-        // if ( typeof pageConfig === 'undefined' ) {
-        //     return;
-        // }
-
-        // if ( pageConfig === null ) {
-        //     return;
-        // }
-
-        // check to see if this page relies on any custom body classes
-        // if ( typeof pageConfig.bodyClass !== 'undefined' ) {
-        //     $body.addClass( pageConfig.bodyClass );
-        // }
 
         Util.setDocumentTitle( pageTitle );
 
@@ -170,9 +155,6 @@
                 }
             );
         }
-
-        // update currentPageConfig
-        // currentPageConfig = pageConfig;
 
         prefetchUpcomingUrls();
 
