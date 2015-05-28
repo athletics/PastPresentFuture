@@ -85,7 +85,7 @@
 
         }
 
-        $window.trigger( 'OnDemandImages.Init' );
+        // $window.trigger( 'OnDemandImages.Init' );
 
         // @todo: Break this out to its own module
         // $( '.scroll-to-anchor' ).each( function () {
