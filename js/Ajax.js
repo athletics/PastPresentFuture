@@ -266,7 +266,6 @@
                 // Prepare
                 var $this = $( this ),
                     url = Util.fullyQualifyUrl( $this.attr( 'href' ) ),
-                    title = null,
                     scrollTarget = null
                 ;
 
@@ -275,17 +274,12 @@
                     return true;
                 }
 
-                if ( typeof $this.attr( 'title' ) !== 'undefined' ) {
-                    title = $this.attr( 'title' );
-                }
-
                 if ( typeof $this.data( 'scroll-target' ) !== 'undefined' ) {
                     scrollTarget = $this.data( 'scroll-target' );
                 }
 
                 // Ajaxify this link
                 State.pushState(
-                    title,
                     url,
                     {
                         scrollTarget: scrollTarget,
