@@ -258,10 +258,7 @@
      */
     function gotoUrl( url, options ) {
 
-        // set empty options if they don't exist
-        if ( typeof options === 'undefined' ) {
-            options = {};
-        }
+        options = options || { url: url, popstate: false };
 
         var data = getUrlData({
                 url: url,
