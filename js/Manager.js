@@ -430,9 +430,9 @@
      */
     function ajaxEventListener() {
 
-        $window.on( 'StateManager.GotoUrl', function ( event, url ) {
+        $window.on( 'StateManager.GotoUrl', function ( event, url, optionsObj ) {
 
-            gotoUrl( url, {} );
+            gotoUrl( url, optionsObj );
 
         } );
 
