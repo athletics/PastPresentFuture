@@ -304,6 +304,8 @@
 
         $window.on( 'StateManager.AfterInitState', newState );
 
+        $window.on( 'StateManager.PushState', pushState );
+
     }
 
     /**
@@ -334,7 +336,7 @@
 
         }
 
-        $window.trigger( 'OnDemandImages.Init' );
+        // $window.trigger( 'OnDemandImages.Init' );
 
         // @todo: Break this out to its own module
         // $( '.scroll-to-anchor' ).each( function () {
@@ -415,23 +417,26 @@
 
     /**
      * Handle how the page updates depending on the browser's use of history
-     *
-     * @param  {String} title   page title for the upcoming page
-     * @param  {String} url     uri for upcoming page
-     * @param  {Object} options passed into the history state object
      */
-    function pushState( title, url, options ) {
+    function pushState( event, object ) {
+
+        object = $.extend( {
+            options: {
+                url: object.url
+            },
+            title: ''
+        }, object );
 
         if ( Util.getMode() === 'traditional' ) {
 
-            window.location = url;
+            window.location = object.url;
 
         } else {
 
             window.history.pushState(
-                options,
-                title,
-                url
+                object.options,
+                object.title,
+                object.url
             );
 
             $window.trigger( 'StateManager.NewState' );
@@ -820,37 +825,29 @@
                 // Prepare
                 var $this = $( this ),
                     url = Util.fullyQualifyUrl( $this.attr( 'href' ) ),
-                    title = null,
-                    scrollTarget = null
+                    scrollTarget = null,
+                    pushObj = {}
                 ;
 
                 // Continue as normal for cmd clicks etc
-                if ( event.which == 2 || event.metaKey ) {
+                if ( event.which === 2 || event.metaKey ) {
                     return true;
-                }
-
-                if ( typeof $this.attr( 'title' ) !== 'undefined' ) {
-                    title = $this.attr( 'title' );
                 }
 
                 if ( typeof $this.data( 'scroll-target' ) !== 'undefined' ) {
                     scrollTarget = $this.data( 'scroll-target' );
                 }
 
-                // Ajaxify this link
-                State.pushState(
-                    title,
-                    url,
-                    {
+                pushObj = {
+                    url: url,
+                    options: {
                         scrollTarget: scrollTarget,
                         scrollPos: parseInt( $( document ).scrollTop(), 10 ),
                         url: url
                     }
-                );
+                };
 
-                $window.trigger( 'StateManager.GotoUrl', url );
-
-                $this.addClass( 'ajax-initialized' );
+                $window.trigger( 'StateManager.GotoUrl', url, pushObj );
 
             } );
 
@@ -932,7 +929,6 @@
         $contentHolder,
         $window = $( window ),
         $body = $( 'body' ),
-        currentPageConfig = {},
         prefetchCache = {
             list: [],
             limit: null
@@ -994,7 +990,7 @@
 
             gotoUrl(
                 history.state.url,
-                {}
+                { popstate: true }
             );
 
             $window.trigger( 'StateManager.StateChange' );
@@ -1013,26 +1009,12 @@
 
         var isInitLoad = false,
             stateInfo = history.state,
-            // pageConfig = $( Config.get( 'content' ) ).data( 'config' ),
             pageTitle = 'title' in options ? options.title : document.title
         ;
 
         if ( typeof options !== 'undefined' && typeof options.isInitLoad !== 'undefined' ) {
             isInitLoad = options.isInitLoad
         }
-
-        // if ( typeof pageConfig === 'undefined' ) {
-        //     return;
-        // }
-
-        // if ( pageConfig === null ) {
-        //     return;
-        // }
-
-        // check to see if this page relies on any custom body classes
-        // if ( typeof pageConfig.bodyClass !== 'undefined' ) {
-        //     $body.addClass( pageConfig.bodyClass );
-        // }
 
         Util.setDocumentTitle( pageTitle );
 
@@ -1045,9 +1027,6 @@
                 }
             );
         }
-
-        // update currentPageConfig
-        // currentPageConfig = pageConfig;
 
         prefetchUpcomingUrls();
 
@@ -1068,10 +1047,6 @@
 
         // stagger prefetch of additional URLs
         $( 'a[data-prefetch]' ).each( function ( index ) {
-
-            // if ( index > prefetchCache.limit ) {
-            //     return false;
-            // }
 
             var thisHref = Util.fullyQualifyUrl( $( this ).attr( 'href' ) );
 
@@ -1097,6 +1072,8 @@
         $contentHolder.html( data.data );
 
         Ajax.ajaxifyLinks( $contentHolder );
+
+        $body.removeClass().addClass( data.classes );
 
         initState( data );
 
@@ -1131,15 +1108,10 @@
      */
     function gotoUrl( url, options ) {
 
-        // set empty options if they don't exist
-        if ( typeof options === 'undefined' ) {
-            options = {};
-        }
+        options = options || { url: url, popstate: false };
 
-        var thisUrl = url,
-            thisOptions = options,
-            data = getUrlData({
-                url: thisUrl,
+        var data = getUrlData({
+                url: url,
                 afterAjaxLoad: function ( data ) {
                     // this function only fires if we need to wait for
                     // an ajax load.
@@ -1147,22 +1119,22 @@
                     // record what the last url had been
                     var lastUrlInQueue = ajaxQueue[ ajaxQueue.length - 1 ].url;
 
-                    removeUrlFromAjaxQueue( thisUrl );
+                    removeUrlFromAjaxQueue( url );
 
                     // save the new data to the cache
-                    saveCacheData( ajaxCache, thisUrl, data );
+                    saveCacheData( ajaxCache, url, data );
 
                     // only proceed if this was the last url in the queue
-                    if ( lastUrlInQueue === thisUrl ) {
+                    if ( lastUrlInQueue === url ) {
 
                         // now that we have the data, recall gotoUrl
-                        gotoUrl( thisUrl, thisOptions );
+                        gotoUrl( url, options );
 
                     } else {
                         debug( '******* still loading: ' + lastUrlInQueue );
                     }
                 }
-            } )
+            })
         ;
 
         // did we get data back, or are we waiting on an ajax request to be completed?
@@ -1176,6 +1148,10 @@
 
         // if we reached this point, we have the data we need and can proceed.
         toggleLoading( false );
+
+        if ( ! options.popstate ) {
+            $window.trigger( 'StateManager.PushState', options );
+        }
 
         renderUrl( data );
 
@@ -1288,7 +1264,8 @@
         var cacheObj = {
             url: url,
             title: Ajax.parseTitle( data ),
-            data: Ajax.parseHtml( data )
+            data: Ajax.parseHtml( data ),
+            classes: data.match(/body\sclass=['|"]([^'|"]*)['|"]/)[1]
         };
 
         cacheType.list.push( cacheObj );
@@ -1325,9 +1302,9 @@
      */
     function ajaxEventListener() {
 
-        $window.on( 'StateManager.GotoUrl', function ( event, url ) {
+        $window.on( 'StateManager.GotoUrl', function ( event, url, optionsObj ) {
 
-            gotoUrl( url, {} );
+            gotoUrl( url, optionsObj );
 
         } );
 
