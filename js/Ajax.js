@@ -271,7 +271,7 @@
                 ;
 
                 // Continue as normal for cmd clicks etc
-                if ( event.which == 2 || event.metaKey ) {
+                if ( event.which === 2 || event.metaKey ) {
                     return true;
                 }
 
