@@ -288,8 +288,6 @@
                     }
                 };
 
-
-                $this.addClass( 'ajax-initialized' );
                 $window.trigger( 'StateManager.GotoUrl', url, pushObj );
 
             } );
