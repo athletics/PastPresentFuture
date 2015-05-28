@@ -194,10 +194,6 @@
         // stagger prefetch of additional URLs
         $( 'a[data-prefetch]' ).each( function ( index ) {
 
-            // if ( index > prefetchCache.limit ) {
-            //     return false;
-            // }
-
             var thisHref = Util.fullyQualifyUrl( $( this ).attr( 'href' ) );
 
             // make sure we don't reload the page we're on
