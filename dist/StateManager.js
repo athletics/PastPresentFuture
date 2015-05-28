@@ -1008,7 +1008,7 @@
     function initState( options ) {
 
         var isInitLoad = false,
-            stateInfo = history.state,
+            currentStateUrl = history.state !== null ? history.state.url : window.location,
             pageTitle = 'title' in options ? options.title : document.title
         ;
 
@@ -1022,7 +1022,7 @@
             $window.trigger(
                 'EventTrackAjax.RecordPageview',
                 {
-                    url: stateInfo.url,
+                    url: currentStateUrl.url,
                     title: pageTitle
                 }
             );
@@ -1043,7 +1043,7 @@
             return false;
         }
 
-        var currentState = history.state;
+        var currentStateUrl = history.state !== null ? history.state.url : window.location;
 
         // stagger prefetch of additional URLs
         $( 'a[data-prefetch]' ).each( function ( index ) {
@@ -1051,7 +1051,7 @@
             var thisHref = Util.fullyQualifyUrl( $( this ).attr( 'href' ) );
 
             // make sure we don't reload the page we're on
-            if ( thisHref !== currentState.url ) {
+            if ( thisHref !== currentStateUrl ) {
                 setTimeout( function () {
                     prefetchUrl( thisHref );
                 }, 50 * ( index + 1 ) );
