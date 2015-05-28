@@ -266,7 +266,8 @@
                 // Prepare
                 var $this = $( this ),
                     url = Util.fullyQualifyUrl( $this.attr( 'href' ) ),
-                    scrollTarget = null
+                    scrollTarget = null,
+                    pushObj = {}
                 ;
 
                 // Continue as normal for cmd clicks etc
@@ -278,19 +279,18 @@
                     scrollTarget = $this.data( 'scroll-target' );
                 }
 
-                // Ajaxify this link
-                State.pushState(
-                    url,
-                    {
+                pushObj = {
+                    url: url,
+                    options: {
                         scrollTarget: scrollTarget,
                         scrollPos: parseInt( $( document ).scrollTop(), 10 ),
                         url: url
                     }
-                );
+                };
 
-                $window.trigger( 'StateManager.GotoUrl', url );
 
                 $this.addClass( 'ajax-initialized' );
+                $window.trigger( 'StateManager.GotoUrl', url, pushObj );
 
             } );
 
