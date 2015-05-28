@@ -263,10 +263,8 @@
             options = {};
         }
 
-        var thisUrl = url,
-            thisOptions = options,
-            data = getUrlData({
-                url: thisUrl,
+        var data = getUrlData({
+                url: url,
                 afterAjaxLoad: function ( data ) {
                     // this function only fires if we need to wait for
                     // an ajax load.
@@ -274,22 +272,22 @@
                     // record what the last url had been
                     var lastUrlInQueue = ajaxQueue[ ajaxQueue.length - 1 ].url;
 
-                    removeUrlFromAjaxQueue( thisUrl );
+                    removeUrlFromAjaxQueue( url );
 
                     // save the new data to the cache
-                    saveCacheData( ajaxCache, thisUrl, data );
+                    saveCacheData( ajaxCache, url, data );
 
                     // only proceed if this was the last url in the queue
-                    if ( lastUrlInQueue === thisUrl ) {
+                    if ( lastUrlInQueue === url ) {
 
                         // now that we have the data, recall gotoUrl
-                        gotoUrl( thisUrl, thisOptions );
+                        gotoUrl( url, options );
 
                     } else {
                         debug( '******* still loading: ' + lastUrlInQueue );
                     }
                 }
-            } )
+            })
         ;
 
         // did we get data back, or are we waiting on an ajax request to be completed?
