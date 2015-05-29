@@ -233,7 +233,8 @@
      */
     function gotoUrl( url, options ) {
 
-        options = options || { url: url, popstate: false };
+        options = options || {};
+        options = $.extend( { url: url, popstate: false }, options );
 
         var data = getUrlData({
                 url: url,
