@@ -1164,8 +1164,7 @@
      */
     function getUrlData( options ) {
 
-        var thisUrl = options.url,
-            trackProgress = true,
+        var trackProgress = true,
             data
         ;
 
@@ -1188,16 +1187,16 @@
             trackProgress = false;
         }
 
-        ajaxQueue.push({ url: thisUrl });
+        ajaxQueue.push({ url: options.url });
 
         // if we reach this point, the data wasn't in the cache. make ajax request.
         Ajax.loadAjax({
-            url: thisUrl,
+            url: options.url,
             dataType: 'html',
             trackProgress: trackProgress,
             success: options.afterAjaxLoad,
             error: function () {
-
+                debug( 'Ajax failed to load' );
             }
         });
 
