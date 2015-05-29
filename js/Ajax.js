@@ -182,7 +182,7 @@
         }
 
         if ( typeof Options.success !== 'undefined' ) {
-            Options.success( data );
+            Options.success( data, textStatus, xhr );
         }
 
     }
