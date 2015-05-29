@@ -110,6 +110,10 @@
         // define success default, augment with callback
         request.success = setRequestSuccess;
 
+        request.beforeSend = function ( xhr ) {
+            xhr.requestUrl = request.url;
+        };
+
         // finally, make request
         $.ajax( request );
 
