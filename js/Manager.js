@@ -236,50 +236,46 @@
         options = options || {};
         options = $.extend( { url: url, popstate: false }, options );
 
+        $( window )
+            .off( 'StateManager.FetchedData' )
+            .on( 'StateManager.FetchedData', function ( event, data ) {
+
+                // Only proceed for currently request url.
+                if ( data.url !== url ) {
+                    return;
+                }
+
+                if ( ! options.popstate ) {
+                    // history.pushState has to happen before rendering.
+                    // Otherwise the page title in the history gets messed up.
+                    $window.trigger( 'StateManager.PushState', options );
+                }
+
+                toggleLoading( false );
+                renderUrl( data );
+
+                // Unbind window event.
+                $( this ).off( 'StateManager.FetchedData' );
+
+            } );
+
         var data = getUrlData({
                 url: url,
-                afterAjaxLoad: function ( data ) {
-                    // this function only fires if we need to wait for
-                    // an ajax load.
-
-                    // record what the last url had been
-                    var lastUrlInQueue = ajaxQueue[ ajaxQueue.length - 1 ].url;
-
-                    removeUrlFromAjaxQueue( url );
+                afterAjaxLoad: function ( data, textStatus, xhr ) {
 
                     // save the new data to the cache
-                    saveCacheData( ajaxCache, url, data );
+                    data = saveCacheData( ajaxCache, xhr.requestUrl, data );
 
-                    // only proceed if this was the last url in the queue
-                    if ( lastUrlInQueue === url ) {
+                    $( window ).trigger( 'StateManager.FetchedData', data );
 
-                        // now that we have the data, recall gotoUrl
-                        gotoUrl( url, options );
-
-                    } else {
-                        debug( '******* still loading: ' + lastUrlInQueue );
-                    }
                 }
             })
         ;
 
-        // did we get data back, or are we waiting on an ajax request to be completed?
+        // Waiting on an ajax request to be completed.
         if ( typeof data.loading !== 'undefined' && data.loading ) {
-
             toggleLoading( true );
-
-            return false;
-
         }
-
-        // if we reached this point, we have the data we need and can proceed.
-        toggleLoading( false );
-
-        if ( ! options.popstate ) {
-            $window.trigger( 'StateManager.PushState', options );
-        }
-
-        renderUrl( data );
 
     }
 
@@ -298,11 +294,11 @@
         ;
 
         if ( data = checkCacheForData( ajaxCache.list, options.url ) ) {
-            return data;
+            return $( window ).trigger( 'StateManager.FetchedData', data );
         }
 
         if ( data = checkCacheForData( prefetchCache.list, options.url ) ) {
-            return data;
+            return $( window ).trigger( 'StateManager.FetchedData', data );
         }
 
         if ( data = checkCacheForData( ajaxQueue, options.url ) ) {
@@ -352,7 +348,9 @@
             isPrefetch: true,
             afterAjaxLoad: function ( data ) {
                 removeUrlFromAjaxQueue( url );
-                saveCacheData( prefetchCache, url, data );
+                data = saveCacheData( prefetchCache, url, data );
+
+                $( window ).trigger( 'StateManager.FetchedData', data );
             }
         });
     }
