@@ -222,18 +222,32 @@
 
     //////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Get valid links to ajaxify.
+     *
+     * @param  {Array} element
+     * @return {Array} element
+     */
     function getElementLinks( element ) {
 
         var items = $.grep( element.find( 'a' ), function ( element, index ) {
 
-            var url = $( element ).attr( 'href' ) || '';
+            var $el = $( element ),
+                url = $el.attr( 'href' ) || '';
 
-            if ( url.indexOf( 'mailto:' ) !== -1 ) {
+            // Intended for a new window.
+            if ( $el.attr( 'target' ) === '_blank' ) {
                 return false;
-            // } else if ( url.indexOf( 'localhost' ) !== -1 ) {
-            //     return true;
-            // } else if ( url.indexOf( ':' ) !== -1 ) {
-            //     return false;
+            }
+
+            // Is a special link types.
+            if ( url.indexOf( 'mailto:' ) !== -1 || url.indexOf( 'javascript:' ) !== -1 ) {
+                return false;
+            }
+
+            // Not relative and doesn't have the same hostname.
+            if ( url.indexOf( '//' ) !== -1 && url.indexOf( window.location.hostname ) === -1 ) {
+                return false;
             }
 
             return true;
