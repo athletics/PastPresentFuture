@@ -997,7 +997,7 @@
                 { popstate: true }
             );
 
-            $window.trigger( 'StateManager.StateChange' );
+            $window.trigger( 'StateManager.PopState' );
 
         } );
 
