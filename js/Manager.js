@@ -117,7 +117,7 @@
         $window.on( 'popstate', function () {
 
             gotoUrl(
-                history.state.url,
+                currentStateUrl(),
                 { popstate: true }
             );
 
@@ -136,7 +136,6 @@
     function initState( options ) {
 
         var isInitLoad = false,
-            currentStateUrl = history.state !== null ? history.state.url : window.location,
             pageTitle = 'title' in options ? options.title : document.title
         ;
 
@@ -150,7 +149,7 @@
             $window.trigger(
                 'EventTrackAjax.RecordPageview',
                 {
-                    url: currentStateUrl.url,
+                    url: currentStateUrl(),
                     title: pageTitle
                 }
             );
@@ -171,15 +170,13 @@
             return false;
         }
 
-        var currentStateUrl = history.state !== null ? history.state.url : window.location;
-
         // stagger prefetch of additional URLs
         $( 'a[data-prefetch]' ).each( function ( index ) {
 
             var thisHref = Util.fullyQualifyUrl( $( this ).attr( 'href' ) );
 
             // make sure we don't reload the page we're on
-            if ( thisHref !== currentStateUrl ) {
+            if ( thisHref !== currentStateUrl() ) {
                 setTimeout( function () {
                     prefetchUrl( thisHref );
                 }, 50 * ( index + 1 ) );
@@ -435,6 +432,23 @@
             gotoUrl( url, optionsObj );
 
         } );
+
+    }
+
+    /**
+     * Get the current state URL from the history.
+     *
+     * @return {String}
+     */
+    function currentStateUrl() {
+
+        var history = window.history;
+
+        if ( history.state !== null ) {
+            return history.state.url;
+        }
+
+        return window.location.href;
 
     }
 
