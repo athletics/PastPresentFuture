@@ -1210,7 +1210,7 @@
             trackProgress: trackProgress,
             success: options.afterAjaxLoad,
             error: function () {
-                debug( 'Ajax failed to load' );
+                location.reload( true );
             }
         });
 
