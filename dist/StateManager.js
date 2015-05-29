@@ -669,6 +669,10 @@
         // define success default, augment with callback
         request.success = setRequestSuccess;
 
+        request.beforeSend = function ( xhr ) {
+            xhr.requestUrl = request.url;
+        };
+
         // finally, make request
         $.ajax( request );
 
@@ -737,7 +741,7 @@
         }
 
         if ( typeof Options.success !== 'undefined' ) {
-            Options.success( data );
+            Options.success( data, textStatus, xhr );
         }
 
     }
@@ -989,7 +993,7 @@
         $window.on( 'popstate', function () {
 
             gotoUrl(
-                history.state.url,
+                currentStateUrl(),
                 { popstate: true }
             );
 
@@ -1008,7 +1012,6 @@
     function initState( options ) {
 
         var isInitLoad = false,
-            currentStateUrl = history.state !== null ? history.state.url : window.location,
             pageTitle = 'title' in options ? options.title : document.title
         ;
 
@@ -1022,7 +1025,7 @@
             $window.trigger(
                 'EventTrackAjax.RecordPageview',
                 {
-                    url: currentStateUrl.url,
+                    url: currentStateUrl(),
                     title: pageTitle
                 }
             );
@@ -1043,15 +1046,13 @@
             return false;
         }
 
-        var currentStateUrl = history.state !== null ? history.state.url : window.location;
-
         // stagger prefetch of additional URLs
         $( 'a[data-prefetch]' ).each( function ( index ) {
 
             var thisHref = Util.fullyQualifyUrl( $( this ).attr( 'href' ) );
 
             // make sure we don't reload the page we're on
-            if ( thisHref !== currentStateUrl ) {
+            if ( thisHref !== currentStateUrl() ) {
                 setTimeout( function () {
                     prefetchUrl( thisHref );
                 }, 50 * ( index + 1 ) );
@@ -1108,52 +1109,49 @@
      */
     function gotoUrl( url, options ) {
 
-        options = options || { url: url, popstate: false };
+        options = options || {};
+        options = $.extend( { url: url, popstate: false }, options );
+
+        $( window )
+            .off( 'StateManager.FetchedData' )
+            .on( 'StateManager.FetchedData', function ( event, data ) {
+
+                // Only proceed for currently request url.
+                if ( data.url !== url ) {
+                    return;
+                }
+
+                if ( ! options.popstate ) {
+                    // history.pushState has to happen before rendering.
+                    // Otherwise the page title in the history gets messed up.
+                    $window.trigger( 'StateManager.PushState', options );
+                }
+
+                toggleLoading( false );
+                renderUrl( data );
+
+                // Unbind window event.
+                $( this ).off( 'StateManager.FetchedData' );
+
+            } );
 
         var data = getUrlData({
                 url: url,
-                afterAjaxLoad: function ( data ) {
-                    // this function only fires if we need to wait for
-                    // an ajax load.
-
-                    // record what the last url had been
-                    var lastUrlInQueue = ajaxQueue[ ajaxQueue.length - 1 ].url;
-
-                    removeUrlFromAjaxQueue( url );
+                afterAjaxLoad: function ( data, textStatus, xhr ) {
 
                     // save the new data to the cache
-                    saveCacheData( ajaxCache, url, data );
+                    data = saveCacheData( ajaxCache, xhr.requestUrl, data );
 
-                    // only proceed if this was the last url in the queue
-                    if ( lastUrlInQueue === url ) {
+                    $( window ).trigger( 'StateManager.FetchedData', data );
 
-                        // now that we have the data, recall gotoUrl
-                        gotoUrl( url, options );
-
-                    } else {
-                        debug( '******* still loading: ' + lastUrlInQueue );
-                    }
                 }
             })
         ;
 
-        // did we get data back, or are we waiting on an ajax request to be completed?
+        // Waiting on an ajax request to be completed.
         if ( typeof data.loading !== 'undefined' && data.loading ) {
-
             toggleLoading( true );
-
-            return false;
-
         }
-
-        // if we reached this point, we have the data we need and can proceed.
-        toggleLoading( false );
-
-        if ( ! options.popstate ) {
-            $window.trigger( 'StateManager.PushState', options );
-        }
-
-        renderUrl( data );
 
     }
 
@@ -1172,11 +1170,11 @@
         ;
 
         if ( data = checkCacheForData( ajaxCache.list, options.url ) ) {
-            return data;
+            return $( window ).trigger( 'StateManager.FetchedData', data );
         }
 
         if ( data = checkCacheForData( prefetchCache.list, options.url ) ) {
-            return data;
+            return $( window ).trigger( 'StateManager.FetchedData', data );
         }
 
         if ( data = checkCacheForData( ajaxQueue, options.url ) ) {
@@ -1226,7 +1224,9 @@
             isPrefetch: true,
             afterAjaxLoad: function ( data ) {
                 removeUrlFromAjaxQueue( url );
-                saveCacheData( prefetchCache, url, data );
+                data = saveCacheData( prefetchCache, url, data );
+
+                $( window ).trigger( 'StateManager.FetchedData', data );
             }
         });
     }
@@ -1281,6 +1281,8 @@
 
         }
 
+        return cacheObj;
+
     }
 
     /**
@@ -1307,6 +1309,23 @@
             gotoUrl( url, optionsObj );
 
         } );
+
+    }
+
+    /**
+     * Get the current state URL from the history.
+     *
+     * @return {String}
+     */
+    function currentStateUrl() {
+
+        var history = window.history;
+
+        if ( history.state !== null ) {
+            return history.state.url;
+        }
+
+        return window.location.href;
 
     }
 
