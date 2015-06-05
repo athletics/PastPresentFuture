@@ -279,7 +279,8 @@
                 }
 
                 toggleLoading( false );
-                renderUrl( data );
+
+                $window.trigger( 'StateManager.RenderUrl', data );
 
                 // Unbind window event.
                 $( this ).off( 'StateManager.FetchedData' );
@@ -458,6 +459,14 @@
         $window.on( 'StateManager.GotoUrl', function ( event, url, optionsObj ) {
 
             gotoUrl( url, optionsObj );
+
+        } );
+
+        $window.on( 'StateManager.RenderUrl', renderUrl );
+
+        $window.on( 'StateManager.InitState', function( event, data ) {
+
+            initState( data );
 
         } );
 
