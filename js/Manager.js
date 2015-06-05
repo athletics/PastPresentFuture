@@ -55,6 +55,7 @@
         history = null,
         mode = 'traditional', // will either be 'dynamic' or 'traditional'
         $contentHolder,
+        $ajaxContainer,
         $window = $( window ),
         $body = $( 'body' ),
         prefetchCache = {
@@ -79,7 +80,7 @@
         prefetchCache.limit = Config.get( 'prefetchCacheLimit' );
         ajaxCache.limit = Config.get( 'ajaxCacheLimit' );
 
-        $contentHolder = $( Config.get( 'content' ) ).first();
+        setWrappers();
 
         if ( $contentHolder.length < 1 ) {
             return;
@@ -143,6 +144,8 @@
             isInitLoad = options.isInitLoad
         }
 
+        setWrappers();
+
         Util.setDocumentTitle( pageTitle );
 
         if ( ! isInitLoad ) {
@@ -186,21 +189,45 @@
     }
 
     /**
+     * Make sure the correct wrappers are selected
+     * regardless of when the function is initialized
+     */
+    function setWrappers() {
+
+        $contentHolder = $( Config.get( 'content' ) ).first();
+
+        $ajaxContainer = $( Config.get( 'ajaxContainer' ) ).first();
+
+        if ( Config.get( 'content' ) !== Config.get( 'ajaxContainer' ) ) {
+            $window.trigger( 'StateManager.BeforeTransition', [ $contentHolder, $ajaxContainer ] );
+        }
+
+    }
+
+    /**
      * Inserts url data to the DOM. Called by gotoUrl().
      *
      * @param  {Object} data
      * @param  {Object} options
      */
-    function renderUrl( data ) {
+    function renderUrl( event, data ) {
 
         // drop in image_box HTML
-        $contentHolder.html( data.data );
+        $ajaxContainer.html( data.data );
 
-        Ajax.ajaxifyLinks( $contentHolder );
+        Ajax.ajaxifyLinks( $ajaxContainer );
 
         $body.removeClass().addClass( data.classes );
 
-        initState( data );
+        if ( Config.get( 'content' ) !== Config.get( 'ajaxContainer' ) ) {
+
+            $window.trigger( 'StateManager.AnimateTransition', data );
+
+        } else {
+
+            initState( data );
+
+        }
 
     }
 
