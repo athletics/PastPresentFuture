@@ -257,9 +257,10 @@
                 // Unbind window event.
                 $( this ).off( 'StateManager.FetchedData' );
 
-            } );
+            } )
+        ;
 
-        var data = getUrlData({
+        var data = getUrlData( {
                 url: url,
                 afterAjaxLoad: function ( data, textStatus, xhr ) {
 
@@ -269,7 +270,7 @@
                     $( window ).trigger( 'StateManager.FetchedData', data );
 
                 }
-            })
+            } )
         ;
 
         // Waiting on an ajax request to be completed.
