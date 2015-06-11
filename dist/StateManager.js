@@ -500,8 +500,7 @@
         debugEnabled = true,
         debug = debugEnabled ? Util.debug : function () {},
         $window = $( window ),
-        $html = $( 'html' ),
-        $body = $( 'body' )
+        $html = $( 'html' )
     ;
 
     //////////////////////////////////////////////////////////////////////////////////////
@@ -542,12 +541,11 @@
     }
 
     function reveal() {
-        $html.addClass( 'is-loading-ajax' );
+        $html.addClass( 'is_loading_ajax' );
     }
 
     function hide() {
-        $html.removeClass( 'is-loading-ajax' );
-        $body.css({ 'overflow': 'auto' });
+        $html.removeClass( 'is_loading_ajax' );
     }
 
     //////////////////////////////////////////////////////////////////////////////////////
