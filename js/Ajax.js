@@ -306,7 +306,7 @@
                     }
                 };
 
-                $window.trigger( 'StateManager.GotoUrl', url, pushObj );
+                $window.trigger( 'StateManager.GotoUrl', [ url, pushObj ] );
 
             } );
 
