@@ -212,6 +212,8 @@
      */
     function renderUrl( event, data ) {
 
+        var prevBodyClasses = $body.attr( 'class' );
+
         // drop in image_box HTML
         $ajaxContainer.html( data.data );
 
@@ -221,7 +223,7 @@
 
         if ( Config.get( 'content' ) !== Config.get( 'ajaxContainer' ) ) {
 
-            $window.trigger( 'StateManager.AnimateTransition', data );
+            $window.trigger( 'StateManager.AnimateTransition', [ data, prevBodyClasses ] );
 
         } else {
 
