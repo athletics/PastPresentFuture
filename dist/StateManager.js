@@ -1088,7 +1088,14 @@
         $ajaxContainer = $( Config.get( 'ajaxContainer' ) ).first();
 
         if ( Config.get( 'content' ) !== Config.get( 'ajaxContainer' ) ) {
-            $window.trigger( 'StateManager.BeforeTransition', [ $contentHolder, $ajaxContainer ] );
+
+            var wrappers = {
+                contentHolder: $contentHolder,
+                ajaxContainer: $ajaxContainer
+            }
+
+            $window.trigger( 'StateManager.BeforeTransition', wrappers );
+
         }
 
     }
@@ -1101,7 +1108,7 @@
      */
     function renderUrl( event, data ) {
 
-        var prevBodyClasses = $body.attr( 'class' );
+        data.prevBodyClasses = $body.attr( 'class' );
 
         // drop in image_box HTML
         $ajaxContainer.html( data.data );
@@ -1112,7 +1119,7 @@
 
         if ( Config.get( 'content' ) !== Config.get( 'ajaxContainer' ) ) {
 
-            $window.trigger( 'StateManager.AnimateTransition', [ data, prevBodyClasses ] );
+            $window.trigger( 'StateManager.AnimateTransition', data );
 
         } else {
 
