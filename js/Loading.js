@@ -53,15 +53,15 @@
 
         $window
             .on(
-                'StateManager.LoadingReveal',
+                'StateManager:LoadingReveal',
                 reveal
             )
             .on(
-                'StateManager.LoadingComplete',
+                'StateManager:LoadingComplete',
                 hide
             )
             .on(
-                'StateManager.LoadingProgress',
+                'StateManager:LoadingProgress',
                 onLoadingProgress
             )
         ;

@@ -51,9 +51,9 @@
 
     function init() {
 
-        $window.on( 'StateManager.AfterInitState', newState );
+        $window.on( 'StateManager:AfterInitState', newState );
 
-        $window.on( 'StateManager.PushState', pushState );
+        $window.on( 'StateManager:PushState', pushState );
 
     }
 
@@ -188,7 +188,7 @@
                 object.url
             );
 
-            $window.trigger( 'StateManager.NewState' );
+            $window.trigger( 'StateManager:NewState' );
 
         }
 

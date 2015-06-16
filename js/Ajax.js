@@ -121,7 +121,7 @@
 
     function onUploadProgress( event ) {
         $window.trigger(
-            'StateManager.LoadingProgress',
+            'StateManager:LoadingProgress',
             {
                 event: event,
                 type: 'upload'
@@ -135,7 +135,7 @@
             largestDownloadedLength = event.loaded;
         }
         $window.trigger(
-            'StateManager.LoadingProgress',
+            'StateManager:LoadingProgress',
             {
                 event: event,
                 type: 'download'
@@ -306,7 +306,7 @@
                     }
                 };
 
-                $window.trigger( 'StateManager.GotoUrl', [ url, pushObj ] );
+                $window.trigger( 'StateManager:GotoUrl', [ url, pushObj ] );
 
             } );
 

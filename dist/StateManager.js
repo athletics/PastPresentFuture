@@ -303,9 +303,9 @@
 
     function init() {
 
-        $window.on( 'StateManager.AfterInitState', newState );
+        $window.on( 'StateManager:AfterInitState', newState );
 
-        $window.on( 'StateManager.PushState', pushState );
+        $window.on( 'StateManager:PushState', pushState );
 
     }
 
@@ -440,7 +440,7 @@
                 object.url
             );
 
-            $window.trigger( 'StateManager.NewState' );
+            $window.trigger( 'StateManager:NewState' );
 
         }
 
@@ -509,15 +509,15 @@
 
         $window
             .on(
-                'StateManager.LoadingReveal',
+                'StateManager:LoadingReveal',
                 reveal
             )
             .on(
-                'StateManager.LoadingComplete',
+                'StateManager:LoadingComplete',
                 hide
             )
             .on(
-                'StateManager.LoadingProgress',
+                'StateManager:LoadingProgress',
                 onLoadingProgress
             )
         ;
@@ -679,7 +679,7 @@
 
     function onUploadProgress( event ) {
         $window.trigger(
-            'StateManager.LoadingProgress',
+            'StateManager:LoadingProgress',
             {
                 event: event,
                 type: 'upload'
@@ -693,7 +693,7 @@
             largestDownloadedLength = event.loaded;
         }
         $window.trigger(
-            'StateManager.LoadingProgress',
+            'StateManager:LoadingProgress',
             {
                 event: event,
                 type: 'download'
@@ -864,7 +864,7 @@
                     }
                 };
 
-                $window.trigger( 'StateManager.GotoUrl', [ url, pushObj ] );
+                $window.trigger( 'StateManager:GotoUrl', [ url, pushObj ] );
 
             } );
 
@@ -1011,7 +1011,7 @@
                 { popstate: true }
             );
 
-            $window.trigger( 'StateManager.PopState' );
+            $window.trigger( 'StateManager:PopState' );
 
         } );
 
@@ -1049,7 +1049,7 @@
 
         prefetchUpcomingUrls();
 
-        $window.trigger( 'StateManager.AfterInitState' );
+        $window.trigger( 'StateManager:AfterInitState' );
 
     }
 
@@ -1094,7 +1094,7 @@
                 ajaxContainer: $ajaxContainer
             }
 
-            $window.trigger( 'StateManager.BeforeTransition', wrappers );
+            $window.trigger( 'StateManager:BeforeTransition', wrappers );
 
         }
 
@@ -1119,7 +1119,7 @@
 
         if ( Config.get( 'content' ) !== Config.get( 'ajaxContainer' ) ) {
 
-            $window.trigger( 'StateManager.AnimateTransition', data );
+            $window.trigger( 'StateManager:AnimateTransition', data );
 
         } else {
 
@@ -1139,12 +1139,12 @@
         if ( isLoading ) {
 
             // reveal loading state
-            $window.trigger( 'StateManager.LoadingReveal' );
+            $window.trigger( 'StateManager:LoadingReveal' );
 
         } else {
 
             // hide loading state
-            $window.trigger( 'StateManager.LoadingComplete' );
+            $window.trigger( 'StateManager:LoadingComplete' );
 
         }
 
@@ -1162,8 +1162,8 @@
         options = $.extend( { url: url, popstate: false }, options );
 
         $( window )
-            .off( 'StateManager.FetchedData' )
-            .on( 'StateManager.FetchedData', function ( event, data ) {
+            .off( 'StateManager:FetchedData' )
+            .on( 'StateManager:FetchedData', function ( event, data ) {
 
                 // Only proceed for currently request url.
                 if ( data.url !== url ) {
@@ -1173,15 +1173,15 @@
                 if ( ! options.popstate ) {
                     // history.pushState has to happen before rendering.
                     // Otherwise the page title in the history gets messed up.
-                    $window.trigger( 'StateManager.PushState', options );
+                    $window.trigger( 'StateManager:PushState', options );
                 }
 
                 toggleLoading( false );
 
-                $window.trigger( 'StateManager.RenderUrl', data );
+                $window.trigger( 'StateManager:RenderUrl', data );
 
                 // Unbind window event.
-                $( this ).off( 'StateManager.FetchedData' );
+                $( this ).off( 'StateManager:FetchedData' );
 
             } )
         ;
@@ -1193,7 +1193,7 @@
                     // save the new data to the cache
                     data = saveCacheData( ajaxCache, xhr.requestUrl, data );
 
-                    $( window ).trigger( 'StateManager.FetchedData', data );
+                    $( window ).trigger( 'StateManager:FetchedData', data );
 
                 }
             } )
@@ -1220,11 +1220,11 @@
         ;
 
         if ( data = checkCacheForData( ajaxCache.list, options.url ) ) {
-            return $( window ).trigger( 'StateManager.FetchedData', data );
+            return $( window ).trigger( 'StateManager:FetchedData', data );
         }
 
         if ( data = checkCacheForData( prefetchCache.list, options.url ) ) {
-            return $( window ).trigger( 'StateManager.FetchedData', data );
+            return $( window ).trigger( 'StateManager:FetchedData', data );
         }
 
         if ( data = checkCacheForData( ajaxQueue, options.url ) ) {
@@ -1276,7 +1276,7 @@
                 removeUrlFromAjaxQueue( url );
                 data = saveCacheData( prefetchCache, url, data );
 
-                $( window ).trigger( 'StateManager.FetchedData', data );
+                $( window ).trigger( 'StateManager:FetchedData', data );
             }
         });
     }
@@ -1354,15 +1354,15 @@
      */
     function ajaxEventListener() {
 
-        $window.on( 'StateManager.GotoUrl', function ( event, url, optionsObj ) {
+        $window.on( 'StateManager:GotoUrl', function ( event, url, optionsObj ) {
 
             gotoUrl( url, optionsObj );
 
         } );
 
-        $window.on( 'StateManager.RenderUrl', renderUrl );
+        $window.on( 'StateManager:RenderUrl', renderUrl );
 
-        $window.on( 'StateManager.InitState', function( event, data ) {
+        $window.on( 'StateManager:InitState', function( event, data ) {
 
             initState( data );
 
