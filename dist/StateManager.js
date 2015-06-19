@@ -154,10 +154,7 @@
 
 } ) );
 /**
- * Config
- * @param  {[type]} window    [description]
- * @param  {[type]} factory [description]
- * @return {[type]}         [description]
+ * Import, get, and set configuration values.
  */
 ( function ( window, factory ) {
 
