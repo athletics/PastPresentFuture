@@ -378,10 +378,7 @@
 
 } ) );
 /**
- * Ajax.js
- * @param  {[type]} window    [description]
- * @param  {[type]} factory [description]
- * @return {[type]}         [description]
+ * Tracks loading state.
  */
 ( function ( window, factory ) {
 
@@ -418,7 +415,6 @@
 
 } ( window, function ( window, $, Util ) {
 
-    // define any private variables
     var name = 'Loading',
         debugEnabled = true,
         debug = debugEnabled ? Util.debug : function () {},
@@ -428,34 +424,34 @@
 
     //////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Binds loading events.
+     */
     function init() {
 
         $window
-            .on(
-                'StateManager:LoadingReveal',
-                reveal
-            )
-            .on(
-                'StateManager:LoadingComplete',
-                hide
-            )
-            .on(
-                'StateManager:LoadingProgress',
-                onLoadingProgress
-            )
-        ;
+            .on( 'StateManager:LoadingProgress', onLoadingProgress )
+            .on( 'StateManager:LoadingReveal', reveal )
+            .on( 'StateManager:LoadingComplete', hide );
 
     }
 
-    function onLoadingProgress( e, options ) {
-
-        //debug(name + ': on_download_progress:');
+    /**
+     * ProgressEvent callback.
+     *
+     * @todo   There are issues when the response is gzipped.
+     * @todo   Should this be removed?
+     *
+     * @param  {Object} event
+     * @param  {Object} options
+     */
+    function onLoadingProgress( event, options ) {
 
         var percentComplete = 0,
             total = options.event.target.getResponseHeader( 'X-Content-Length' )
         ;
 
-        if ( typeof total === 'undefined' || total === 0 ) {
+        if ( ! total ) {
             return;
         }
 
@@ -464,16 +460,15 @@
     }
 
     function reveal() {
-        $html.addClass( 'is_loading_ajax' );
+        $html.addClass( 'is-loading-ajax' );
     }
 
     function hide() {
-        $html.removeClass( 'is_loading_ajax' );
+        $html.removeClass( 'is-loading-ajax' );
     }
 
     //////////////////////////////////////////////////////////////////////////////////////
 
-    // return any public methods
     return {
         init: init
     };
