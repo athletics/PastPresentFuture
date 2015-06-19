@@ -1307,7 +1307,10 @@
 
 } ) );
 /**
- * Bootstrap.js
+ * Builds the StateManager prototype.
+ * This file should be required directly for CommonJS usage.
+ *
+ * @see  http://requirejs.org/docs/commonjs.html#intro On CommonJS Transport.
  */
 ( function ( window, factory ) {
 
@@ -1354,26 +1357,30 @@
 
     'use strict';
 
+    /**
+     * StateManager prototype.
+     *
+     * @param  {Object} newConfig Optional configuration for initialization.
+     */
     function StateManager( newConfig ) {
 
         newConfig = newConfig || false;
 
         Config.init( newConfig );
-
         State.init();
-
         Loading.init();
-
         Manager.init();
 
     }
 
-    StateManager.prototype.Util = Util;
-    StateManager.prototype.Config = Config;
-    StateManager.prototype.State = State;
-    StateManager.prototype.Loading = Loading;
-    StateManager.prototype.Ajax = Ajax;
-    StateManager.prototype.Manager = Manager;
+    var module = StateManager.prototype;
+
+    module.Util = Util;
+    module.Config = Config;
+    module.State = State;
+    module.Loading = Loading;
+    module.Ajax = Ajax;
+    module.Manager = Manager;
 
     return StateManager;
 
