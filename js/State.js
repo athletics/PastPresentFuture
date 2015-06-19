@@ -1,8 +1,5 @@
 /**
- * State.js
- * @param  {[type]} root    [description]
- * @param  {[type]} factory [description]
- * @return {[type]}         [description]
+ * Push state into the browser history.
  */
 ( function ( window, factory ) {
 
@@ -49,35 +46,30 @@
 
     //////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Bind pushState listeners.
+     */
     function init() {
 
-        $window.on( 'StateManager:AfterInitState', newState );
-
-        $window.on( 'StateManager:PushState', pushState );
+        $window
+            .on( 'StateManager:AfterInitState', newState )
+            .on( 'StateManager:PushState', pushState );
 
     }
 
     /**
-     * Decide where to focus the page after push state
+     * Decide where to focus the page after push state.
      */
     function newState() {
 
-        var state = window.history.state,
-            scrollTarget = 0
-        ;
-
-        if ( state !== null && typeof state.scrollTarget !== 'undefined' && $( state.scrollTarget ).length > 0 )  {
-            scrollTarget = $( state.scrollTarget ).first().offset().top;
-        }
+        var scrollTarget = getScrollTarget();
 
         if ( ! $( 'html' ).hasClass( 'initial-load' ) ) {
 
-            $( 'html, body' )
-                .stop()
-                .animate({
-                    'scrollTop' : scrollTarget
-                }, 200 )
-            ;
+            $( 'html, body' ).stop()
+                .animate( {
+                    scrollTop: scrollTarget
+                }, 200 );
 
         } else {
 
@@ -85,13 +77,33 @@
 
         }
 
-        // trigger a scroll for good measure
-        $window.trigger( 'WindowEvents.Scroll' );
+    }
+
+    /**
+     * If a target is set in state, use its scroll position.
+     *
+     * @return {Integer} The top of the scrollTarget, default is 0.
+     */
+    function getScrollTarget() {
+
+        var state = window.history.state || {};
+
+        if ( ! 'scrollTarget' in state ) {
+            return 0;
+        }
+
+        var $target = $( state.scrollTarget );
+
+        if ( ! $target.length ) {
+            return 0;
+        }
+
+        return $target.first().offset().top;
 
     }
 
     /**
-     * Handle how the page updates depending on the browser's use of history
+     * Handle how the page updates depending on the browser's use of history.
      */
     function pushState( event, object ) {
 
