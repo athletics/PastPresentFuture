@@ -1,9 +1,7 @@
 var gulp = require( 'gulp' ),
-    rename = require( 'gulp-rename' ),
     watch = require( 'gulp-watch' ),
     requirejs = require( 'requirejs' ),
-    pkg = require( './package.json' ),
-    minifyCSS = require( 'gulp-minify-css' )
+    pkg = require( './package.json' )
 ;
 
 var rjs = function ( name, out, optimize ) {
@@ -38,17 +36,8 @@ gulp.task( 'js', function () {
     rjs( './js/Index', './dist/StateManager', true );
 } );
 
-gulp.task( 'css', function () {
-    gulp.src( 'css/StateManager.css' )
-        .pipe( gulp.dest( 'dist' ) )
-        .pipe( minifyCSS({ advanced: false }) )
-        .pipe( rename( 'StateManager.min.css' ) )
-        .pipe( gulp.dest( 'dist' ) )
-    ;
-} );
-
 gulp.task( 'watch', function () {
     gulp.watch( 'js/*.js', [ 'js' ] );
 } );
 
-gulp.task( 'default', [ 'js', 'css', 'watch' ] );
+gulp.task( 'default', [ 'js', 'watch' ] );
