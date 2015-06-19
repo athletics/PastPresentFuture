@@ -2,8 +2,8 @@
  * statemanager - Where have we been? Where are we going?
  *
  * @author Athletics - http://athleticsnyc.com
- * @see https://github.com/athletics/statemanager
- * @version 0.0.1
+ * @see https://github.com/athletics/StateManager
+ * @version 0.1.0
  *//**
  * Util.js
  * @param  {[type]} window    [description]
@@ -336,80 +336,6 @@
             $( 'html' ).removeClass( 'initial-load' );
 
         }
-
-        // $window.trigger( 'OnDemandImages.Init' );
-
-        // @todo: Break this out to its own module
-        // $( '.scroll-to-anchor' ).each( function () {
-        //     var $this = $( this );
-
-        //     if ( ! $this.hasClass( 'initialized' ) ) {
-        //         return;
-        //     }
-
-        //     $this
-        //         .off( 'click.Manager' )
-        //         .on( 'click.' + name, function ( event ) {
-
-        //         var scroll_target_selector = $(this).data('scroll-target'),
-        //             scroll_target_focus = $(this).data('scroll-focus'),
-        //             $focus_target = null,
-        //             $target = null,
-        //             scroll_destination = 0
-        //         ;
-
-        //         if ( !_.isUndefined(scroll_target_selector) ) {
-
-        //             $target = $( scroll_target_selector ).first();
-
-        //             if ($target.length > 0) {
-
-        //                 // Continue as normal for cmd clicks etc
-        //                 if ( event.which == 2 || event.metaKey ) { return true; }
-
-        //                 // Determine scroll_destination
-        //                 scroll_destination = $target.offset().top - Header.get_scroll_offset() - 60;
-
-        //                 $target.addClass('highlight-sequence-init');
-
-        //                 // scroll to top
-        //                 // @todo: Abstract window scrolling
-        //                 $('html,body').stop().animate(
-        //                     {
-        //                         'scrollTop' : scroll_destination
-        //                     },
-        //                     {
-        //                         'duration' : 400,
-        //                         'easing' : 'easeInOutCubic',
-        //                         'complete' : function(){
-
-        //                             // Is there a focus target included?
-        //                             if ( !_.isUndefined(scroll_target_focus) ) {
-        //                                 $focus_target = $( scroll_target_focus );
-        //                                 if ($focus_target.length > 0) {
-        //                                     $focus_target.focus();
-        //                                 }
-        //                             }
-
-        //                             $target.addClass('highlight-sequence');
-        //                             setTimeout(function() {
-        //                                 $target
-        //                                     .removeClass('highlight-sequence-init')
-        //                                     .removeClass('highlight-sequence')
-        //                                 ;
-        //                             }, 1500);
-        //                         }
-        //                     }
-        //                 );
-
-        //                 event.preventDefault();
-        //                 return false;
-        //             }
-        //         }
-        //     });
-
-        //     $this.addClass('initialized');
-        // });
 
         // trigger a scroll for good measure
         $window.trigger( 'WindowEvents.Scroll' );
