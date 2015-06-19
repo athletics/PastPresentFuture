@@ -1,24 +1,25 @@
 {
   "name": "statemanager",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Where have we been? Where are we going?",
   "main": "src/Index.js",
   "repository": {
     "type": "git",
-    "url": "https://rossluebe@github.com/athletics/statemanager.git"
+    "url": "https://github.com/athletics/StateManager.git"
   },
   "author": {
     "name": "Athletics",
     "url": "http://athleticsnyc.com"
   },
   "license": "Apache-2.0",
-  "homepage": "https://github.com/athletics/statemanager",
-  "dependencies": {
+  "homepage": "https://github.com/athletics/StateManager",
+  "devDependencies": {
     "gulp": "^3.8.11",
     "gulp-cli": "^0.2.0",
     "gulp-watch": "^4.2.4",
-    "requirejs": "^2.1.17",
-    "gulp-minify-css": "^1.1.1",
-    "gulp-rename": "^1.2.2"
+    "requirejs": "^2.1.17"
+  },
+  "dependencies": {
+    "jquery": "^2.1.4"
   }
 }

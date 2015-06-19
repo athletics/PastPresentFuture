@@ -1,12 +1,12 @@
 {
   "name": "statemanager",
-  "version": "0.0.1",
-  "homepage": "https://github.com/athletics/statemanager",
+  "version": "0.1.0",
+  "homepage": "https://github.com/athletics/StateManager",
   "authors": [
     "Athletics"
   ],
   "description": "Where have we been? Where are we going?",
-  "main": "StateManager.js",
+  "main": "dist/StateManager.min.js",
   "moduleType": [
     "amd",
     "globals",
@@ -23,5 +23,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4"
+  }
 }
