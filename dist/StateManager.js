@@ -483,10 +483,7 @@
 
 } ) );
 /**
- * Ajax.js
- * @param  {[type]} window    [description]
- * @param  {[type]} factory [description]
- * @return {[type]}         [description]
+ * Handles the AJAX load of local links in the DOM.
  */
 ( function ( window, factory ) {
 
@@ -535,170 +532,179 @@
         debugEnabled = true,
         debug = debugEnabled ? Util.debug : function () {},
         largestDownloadedLength = 0,
-        request = {},
         $window = $( window ),
         Options = null
     ;
 
     //////////////////////////////////////////////////////////////////////////////////////
 
-    /*
-    *   loadAjax( options )
-    *       Makes an ajax request, handles response.
-    */
-
+    /**
+     * Makes an ajax request, handles response.
+     *
+     * @param  {Object} options
+     */
     function loadAjax( options ) {
 
-        if ( typeof options === 'undefined' ) {
-            return false;
+        options = options || {};
+
+        if ( ! 'url' in options ) {
+            return;
         }
 
-        if ( typeof options.url === 'undefined' ) {
-            debug( name + ': loadAjax: ERROR: No url defined.' );
-            return false;
-        }
+        var request = $.extend( {
+            data:                {},
+            dataType:            'html',
+            disableAfterSuccess: false,
+            timeout:             ( 20 * 1000 ), // 20 seconds
+            trackProgress:       false,
+            type:                'get'
+        }, options );
 
         Options = options;
 
-        var browserSupportsXhr2 = ( window.ProgressEvent && window.FormData ) ? true : false,
-            trackProgress = ( typeof options.trackProgress !== 'undefined' ) ? options.trackProgress : false
-        ;
+        var browserSupportsXhr2 = window.ProgressEvent && window.FormData;
 
-        request.url = options.url;
-
-        if ( browserSupportsXhr2 && trackProgress ) {
-
+        if ( browserSupportsXhr2 && request.trackProgress ) {
             request.xhr = setRequestXhr;
-
         }
 
-        // request type
-        request.type = ( typeof options.type !== 'undefined' ) ? options.type : 'get';
-
-        // data sent to the server
-        request.data = ( typeof options.data !== 'undefined' ) ? options.data : {};
-
-        // are we expecting a particular data type from the server?
-        if ( typeof options.dataType !== 'undefined' ) {
-            request.dataType = options.dataType;
-        }
-
-        // timeout params; default to 20 seconds
-        request.timeout = ( typeof options.timeout !== 'undefined' ) ? options.timeout : ( 20 * 1000 );
-
-        // define error default, augment with callback
         request.error = setRequestError;
-
-        request.disableAfterSuccess = ( typeof options.disableAfterSuccess !== 'undefined' ) ? options.disableAfterSuccess : false;
-
-        // define success default, augment with callback
         request.success = setRequestSuccess;
 
         request.beforeSend = function ( xhr ) {
             xhr.requestUrl = request.url;
         };
 
-        // finally, make request
         $.ajax( request );
 
     }
 
-    function onUploadProgress( event ) {
-        $window.trigger(
-            'StateManager:LoadingProgress',
-            {
-                event: event,
-                type: 'upload'
-            }
-        );
-    }
-
-    function onDownloadProgress( event ) {
-
-        if ( event.loaded > largestDownloadedLength ) {
-            largestDownloadedLength = event.loaded;
-        }
-        $window.trigger(
-            'StateManager:LoadingProgress',
-            {
-                event: event,
-                type: 'download'
-            }
-        );
-    }
-
-    function setRequestXhr() {
-
-        var thisXhr = new window.XMLHttpRequest();
-
-        //Upload progress
-        thisXhr.upload.addEventListener(
-            'progress',
-            onUploadProgress,
-            false
-        );
-
-        //Download progress
-        thisXhr.addEventListener(
-            'progress',
-            onDownloadProgress,
-            false
-        );
-
-        return thisXhr;
-
-    }
-
+    /**
+     * Ajax error callback.
+     *
+     * @param {jqXHR}  jqXHR
+     * @param {String} textStatus
+     * @param {String} errorThrown
+     */
     function setRequestError( event, textStatus, errorThrown ) {
-        debug( name + ': error loading: ' + request.url );
-        debug( name + ': error textStatus: ' + textStatus );
-        debug( name + ': error errorThrown: ' + errorThrown );
 
-        if ( typeof Options.error !== 'undefined' ) {
-            Options.error( event, textStatus, errorThrown );
+        if ( ! 'error' in Options ) {
+            return;
         }
-    };
 
-    function setRequestSuccess( data, textStatus, xhr ) {
+        Options.error( event, textStatus, errorThrown );
+
+    }
+
+    /**
+     * Ajax success callback.
+     *
+     * @param {Mixed}  data
+     * @param {String} textStatus
+     * @param {jqXHR}  jqXHR
+     */
+    function setRequestSuccess( data, textStatus, jqXHR ) {
 
         if ( data.length < largestDownloadedLength ) {
             largestDownloadedLength = data.length;
         }
 
-        if ( typeof Options.success !== 'undefined' ) {
-            Options.success( data, textStatus, xhr );
+        if ( ! 'success' in Options ) {
+            return;
         }
+
+        Options.success( data, textStatus, jqXHR );
+
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Builds a new xhr object to monitor progress.
+     *
+     * @see  https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest#Monitoring_progress
+     */
+    function setRequestXhr() {
+
+        var thisXhr = new window.XMLHttpRequest();
+
+        // Upload progress
+        thisXhr.upload.addEventListener( 'progress', onUploadProgress, false );
+
+        // Download progress
+        thisXhr.addEventListener( 'progress', onDownloadProgress, false );
+
+        return thisXhr;
 
     }
 
     /**
+     * Upload ProgressEvent
+     *
+     * @fires  StateManager:LoadingProgress
+     * @param  {Object} event
+     */
+    function onUploadProgress( event ) {
+
+        $window.trigger( 'StateManager:LoadingProgress', {
+            event: event,
+            type: 'upload'
+        } );
+
+    }
+
+    /**
+     * Download ProgressEvent
+     *
+     * @fires  StateManager:LoadingProgress
+     * @param  {Object} event
+     */
+    function onDownloadProgress( event ) {
+
+        if ( event.loaded > largestDownloadedLength ) {
+            largestDownloadedLength = event.loaded;
+        }
+
+        $window.trigger( 'StateManager:LoadingProgress', {
+            event: event,
+            type: 'download'
+        } );
+
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////
+
+    /**
      * Responsible for processing HTML content coming off the server.
+     *
      * @param  {String} data Full page HTML blob
-     * @return {}      [description]
+     * @return {Array}       jQuery element
      */
     function parseHtml( data ) {
 
-        var marker = Config.get( 'content' ),
-            $data
-        ;
-
         data = $.parseHTML( data, document, true );
-        $data = $( data );
+
+        var marker = Config.get( 'content' ),
+            $data = $( data )
+        ;
 
         return $data.filter( marker ).add( $data.find( marker ) );
 
     }
 
+    /**
+     * Grab <title> from the <head>
+     *
+     * @param  {String} data
+     * @return {String}      The new page title
+     */
     function parseTitle( data ) {
 
-        var $data,
-            titles
-        ;
-
         data = $.parseHTML( data.match( /<head[^>]*>([\s\S.]*)<\/head>/i )[0], document, true );
-        $data = $( data );
 
-        titles = $data.filter( 'title' );
+        var $data = $( data ),
+            titles =$data.filter( 'title' )
+        ;
 
         return titles.last().text();
 
@@ -709,22 +715,22 @@
     /**
      * Get valid links to ajaxify.
      *
-     * @param  {Array} element
-     * @return {Array} element
+     * @param  {Array} $container
+     * @return {Array} $validLinks
      */
-    function getElementLinks( element ) {
+    function getValidLinks( $container ) {
 
-        var items = $.grep( element.find( 'a' ), function ( element, index ) {
+        var $validLinks = $.grep( $container.find( 'a' ), function ( link, index ) {
 
-            var $el = $( element ),
-                url = $el.attr( 'href' ) || '';
+            var $link = $( link ),
+                url = $link.attr( 'href' ) || '';
 
             // Intended for a new window.
-            if ( $el.attr( 'target' ) === '_blank' ) {
+            if ( $link.attr( 'target' ) === '_blank' ) {
                 return false;
             }
 
-            // Is a special link types.
+            // Special link types.
             if ( url.indexOf( 'mailto:' ) !== -1 || url.indexOf( 'javascript:' ) !== -1 ) {
                 return false;
             }
@@ -738,77 +744,60 @@
 
         } );
 
-        return items;
+        return $validLinks;
 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-    *   ajaxifyLinks( $target )
-    *       Hijacks links
-    */
-
+    /**
+     * Hijacks local links.
+     *
+     * @param  {Array} $target
+     * @return {Array} $target
+     */
     function ajaxifyLinks( $target ) {
 
-        // Prepare
-        var $this = $target,
-            elementLinks = getElementLinks( $this )
-        ;
+        var validLinks = getValidLinks( $target );
 
-        // Ajaxify
-        $.each( elementLinks, function () {
+        $.each( validLinks, function () {
 
-            var $this = $( this );
+            $( this )
+                .on( 'click.' + name, function ( event ) {
 
-            $this.on( 'click.' + name, function ( event ) {
-
-                event.preventDefault();
-
-                // Prepare
-                var $this = $( this ),
-                    url = Util.fullyQualifyUrl( $this.attr( 'href' ) ),
-                    scrollTarget = null,
-                    pushObj = {}
-                ;
-
-                // Continue as normal for cmd clicks etc
-                if ( event.which === 2 || event.metaKey ) {
-                    return true;
-                }
-
-                if ( typeof $this.data( 'scroll-target' ) !== 'undefined' ) {
-                    scrollTarget = $this.data( 'scroll-target' );
-                }
-
-                pushObj = {
-                    url: url,
-                    options: {
-                        scrollTarget: scrollTarget,
-                        scrollPos: parseInt( $( document ).scrollTop(), 10 ),
-                        url: url
+                    // Continue as normal for cmd clicks etc
+                    if ( event.which === 2 || event.metaKey ) {
+                        return true;
                     }
-                };
 
-                $window.trigger( 'StateManager:GotoUrl', [ url, pushObj ] );
+                    var $this = $( this ),
+                        url = Util.fullyQualifyUrl( $this.attr( 'href' ) )
+                    ;
 
-            } );
+                    $window.trigger( 'StateManager:GotoUrl', [ url, {
+                        url: url,
+                        options: {
+                            scrollPos: parseInt( $( document ).scrollTop(), 10 ),
+                            scrollTarget: $this.data( 'scroll-target' ),
+                            url: url
+                        }
+                    } ] );
 
-            $this.addClass( 'ajax-initialized' );
+                    event.preventDefault();
+
+                } )
+                .addClass( 'ajax-initialized' );
 
         } );
 
-        // Chain
-        return $this;
+        return $target;
 
     }
 
     //////////////////////////////////////////////////////////////////////////////////////
 
     return {
-        loadAjax: loadAjax,
-        parseHtml: parseHtml,
-        parseTitle: parseTitle,
+        loadAjax:     loadAjax,
+        parseHtml:    parseHtml,
+        parseTitle:   parseTitle,
         ajaxifyLinks: ajaxifyLinks
     };
 
