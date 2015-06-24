@@ -918,7 +918,12 @@
 
         Ajax.ajaxifyLinks( $body );
 
-        $window.on( 'popstate', function () {
+        $window.on( 'popstate', function ( event ) {
+
+            // Don't reload the current page if the popstate event is empty
+            if ( event.originalEvent.state === null ) {
+                return;
+            }
 
             gotoUrl( currentStateUrl(), {
                 popstate: true
@@ -1099,7 +1104,7 @@
                 // save the new data to the cache
                 data = saveCacheData( ajaxCache, xhr.requestUrl, data );
 
-                $( window ).trigger( 'StateManager:FetchedData', data );
+                $window.trigger( 'StateManager:FetchedData', data );
 
             }
         } );
@@ -1125,11 +1130,11 @@
         ;
 
         if ( data = checkCacheForData( ajaxCache.list, options.url ) ) {
-            return $( window ).trigger( 'StateManager:FetchedData', data );
+            return $window.trigger( 'StateManager:FetchedData', data );
         }
 
         if ( data = checkCacheForData( prefetchCache.list, options.url ) ) {
-            return $( window ).trigger( 'StateManager:FetchedData', data );
+            return $window.trigger( 'StateManager:FetchedData', data );
         }
 
         if ( data = checkCacheForData( ajaxQueue, options.url ) ) {
@@ -1176,7 +1181,7 @@
                 removeUrlFromAjaxQueue( url );
                 data = saveCacheData( prefetchCache, url, data );
 
-                $( window ).trigger( 'StateManager:FetchedData', data );
+                $window.trigger( 'StateManager:FetchedData', data );
             }
         } );
 
