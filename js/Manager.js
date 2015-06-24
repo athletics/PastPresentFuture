@@ -102,7 +102,12 @@
 
         Ajax.ajaxifyLinks( $body );
 
-        $window.on( 'popstate', function () {
+        $window.on( 'popstate', function ( event ) {
+
+            // Don't reload the current page if the popstate event is empty
+            if ( event.originalEvent.state === null ) {
+                return;
+            }
 
             gotoUrl( currentStateUrl(), {
                 popstate: true
