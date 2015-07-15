@@ -35,65 +35,58 @@
 
     'use strict';
 
-    var name = 'Util',
-        debugEnabled = true,
-        debug
-    ;
-
-    //////////////////////////////////////////////////////////////////////////////////////
-
     /**
-     * A console.log wrapper with the correct line numbers.
+     * Get the current state URL from the history.
      *
-     * @see    https://gist.github.com/bgrins/5108712
-     * @see    https://developer.mozilla.org/en-US/docs/Web/API/Console/log
-     * @param  {Mixed}
      * @return {String}
      */
-    var debug = function () {
+    function currentStateUrl() {
 
-        if ( typeof console !== 'object' || ! console.log ) {
-            return;
+        var history = window.history;
+
+        if ( history.state !== null ) {
+            return history.state.url;
         }
 
-        return console.log.bind( console );
+        return window.location.href;
 
-    } ();
+    }
 
     /**
-     * Get a full url from a relative url.
+     * Does the browser support window.history and push state.
      *
-     * @todo   Remove hardcoded localhost URLs.
-     * @todo   Remove bypass.
-     *
-     * @param  {String} url
-     * @return {String} url
+     * @return {String} Browser mode
      */
-    function fullyQualifyUrl( url ) {
+    function getMode() {
 
-        var bypass = true;
-
-        if ( bypass ) {
-            return url;
+        if ( ! window.history || ! window.history.pushState || ! window.history.replaceState ) {
+            return 'traditional';
         }
 
-        if ( url.indexOf( 'http://' ) === -1 &&
-            url.indexOf( 'http://localhost:8000/' ) === -1 &&
-            url.substring( 0, 1 ) === '/' ) {
+        return 'dynamic';
 
-            url = 'http://localhost:8000/' + url;
+    }
 
+    /**
+     * If a target is set in state, use its scroll position.
+     *
+     * @return {Integer} The top of the scrollTarget, default is 0.
+     */
+    function getScrollTarget() {
+
+        var state = window.history.state || {};
+
+        if ( ! 'scrollTarget' in state ) {
+            return 0;
         }
 
-        // add trailing slash if need be
-        if ( url === 'http://localhost:8000/' &&
-            url.substring( url.length - 1, url.length ) !== '/' ) {
+        var $target = $( state.scrollTarget );
 
-            url += '/';
-
+        if ( ! $target.length ) {
+            return 0;
         }
 
-        return url;
+        return $target.first().offset().top;
 
     }
 
@@ -130,28 +123,13 @@
 
     }
 
-    /**
-     * Does the browser support window.history and push state.
-     *
-     * @return {String} Browser mode
-     */
-    function getMode() {
-
-        if ( ! window.history || ! window.history.pushState || ! window.history.replaceState ) {
-            return 'traditional';
-        }
-
-        return 'dynamic';
-
-    }
-
     //////////////////////////////////////////////////////////////////////////////////////
 
     return {
-        debug:            debug,
-        fullyQualifyUrl:  fullyQualifyUrl,
-        setDocumentTitle: setDocumentTitle,
-        getMode:          getMode
+        currentStateUrl:  currentStateUrl,
+        getMode:          getMode,
+        getScrollTarget:  getScrollTarget,
+        setDocumentTitle: setDocumentTitle
     };
 
 } ) );

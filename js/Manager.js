@@ -44,10 +44,7 @@
 
     'use strict';
 
-    var name = 'Manager',
-        debugEnabled = true,
-        debug = debugEnabled ? Util.debug : function () {},
-        initialized = false,
+    var initialized = false,
         history = window.history,
         mode = 'traditional',
         $contentHolder,
@@ -109,7 +106,7 @@
                 return;
             }
 
-            gotoUrl( currentStateUrl(), {
+            gotoUrl( Util.currentStateUrl(), {
                 popstate: true
             } );
 
@@ -139,7 +136,7 @@
             setWrappers();
 
             $window.trigger( 'StateManager:RecordPageview', {
-                url:   currentStateUrl(),
+                url:   Util.currentStateUrl(),
                 title: options.title
             } );
         }
@@ -161,10 +158,10 @@
 
         $( 'a[data-prefetch]' ).each( function ( index ) {
 
-            var url = Util.fullyQualifyUrl( $( this ).attr( 'href' ) );
+            var url = $( this ).attr( 'href' );
 
             // make sure we don't reload the page we're on
-            if ( url === currentStateUrl() ) {
+            if ( url === Util.currentStateUrl() ) {
                 return;
             }
 
@@ -461,24 +458,8 @@
             .on( 'StateManager:RenderUrl', renderUrl )
             .on( 'StateManager:InitState', function ( event, data ) {
                 initState( data );
-            } );
-
-    }
-
-    /**
-     * Get the current state URL from the history.
-     *
-     * @return {String}
-     */
-    function currentStateUrl() {
-
-        var history = window.history;
-
-        if ( history.state !== null ) {
-            return history.state.url;
-        }
-
-        return window.location.href;
+            } )
+        ;
 
     }
 
