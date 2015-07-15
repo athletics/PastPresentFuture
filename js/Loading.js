@@ -36,10 +36,7 @@
 
 } ( window, function ( window, $, Util ) {
 
-    var name = 'Loading',
-        debugEnabled = true,
-        debug = debugEnabled ? Util.debug : function () {},
-        $window = $( window ),
+    var $window = $( window ),
         $html = $( 'html' )
     ;
 

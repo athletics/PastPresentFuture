@@ -13,7 +13,7 @@
         define( [
             './Util',
             './Config',
-            './State',
+            './PushState',
             './Loading',
             './Ajax',
             './Manager'
@@ -24,7 +24,7 @@
         module.exports = factory(
             require( './Util' ),
             require( './Config' ),
-            require( './State' ),
+            require( './PushState' ),
             require( './Loading' ),
             require( './Ajax' ),
             require( './Manager' )
@@ -37,7 +37,7 @@
         window.StateManager = factory(
             _StateManager.Util,
             _StateManager.Config,
-            _StateManager.State,
+            _StateManager.PushState,
             _StateManager.Loading,
             _StateManager.Ajax,
             _StateManager.Manager
@@ -45,7 +45,7 @@
 
     }
 
-} ( window, function ( Util, Config, State, Loading, Ajax, Manager ) {
+} ( window, function ( Util, Config, PushState, Loading, Ajax, Manager ) {
 
     'use strict';
 
@@ -59,7 +59,7 @@
         newConfig = newConfig || false;
 
         Config.init( newConfig );
-        State.init();
+        PushState.init();
         Loading.init();
         Manager.init();
 
@@ -69,7 +69,7 @@
 
     module.Util = Util;
     module.Config = Config;
-    module.State = State;
+    module.PushState = PushState;
     module.Loading = Loading;
     module.Ajax = Ajax;
     module.Manager = Manager;

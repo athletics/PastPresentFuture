@@ -30,10 +30,7 @@
 
 } ( window, function ( $, Util ) {
 
-    var name = 'Config',
-        debugEnabled = true,
-        debug = debugEnabled ? Util.debug : function () {},
-        config = {};
+    var config = {};
 
     //////////////////////////////////////////////////////////////////////////////////////
 

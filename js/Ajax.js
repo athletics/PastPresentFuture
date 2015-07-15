@@ -10,10 +10,9 @@
         define( [
             'jquery',
             './Util',
-            './Config',
-            './State'
-        ], function ( $, Util, Config, State ) {
-            return factory( window, $, Util, Config, State );
+            './Config'
+        ], function ( $, Util, Config ) {
+            return factory( window, $, Util, Config );
         } );
 
     } else if ( typeof exports === 'object' ) {
@@ -22,8 +21,7 @@
             window,
             require( 'jquery' ),
             require( './Util' ),
-            require( './Config' ),
-            require( './State' )
+            require( './Config' )
         );
 
     } else {
@@ -34,20 +32,16 @@
             window,
             window.jQuery,
             window.StateManager.Util,
-            window.StateManager.Config,
-            window.StateManager.State
+            window.StateManager.Config
         );
 
     }
 
-} ( window, function ( window, $, Util, Config, State ) {
+} ( window, function ( window, $, Util, Config ) {
 
     'use strict';
 
-    var name = 'Ajax',
-        debugEnabled = true,
-        debug = debugEnabled ? Util.debug : function () {},
-        largestDownloadedLength = 0,
+    var largestDownloadedLength = 0,
         $window = $( window ),
         Options = null
     ;
@@ -213,7 +207,7 @@
         $.each( validLinks, function () {
 
             $( this )
-                .on( 'click.' + name, function ( event ) {
+                .on( 'click.StateManager', function ( event ) {
 
                     // Continue as normal for cmd clicks etc
                     if ( event.which === 2 || event.metaKey ) {
@@ -221,7 +215,7 @@
                     }
 
                     var $this = $( this ),
-                        url = Util.fullyQualifyUrl( $this.attr( 'href' ) )
+                        url = $this.attr( 'href' )
                     ;
 
                     $window.trigger( 'StateManager:GotoUrl', [ url, {

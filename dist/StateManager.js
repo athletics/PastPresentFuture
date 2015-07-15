@@ -41,65 +41,58 @@
 
     'use strict';
 
-    var name = 'Util',
-        debugEnabled = true,
-        debug
-    ;
-
-    //////////////////////////////////////////////////////////////////////////////////////
-
     /**
-     * A console.log wrapper with the correct line numbers.
+     * Get the current state URL from the history.
      *
-     * @see    https://gist.github.com/bgrins/5108712
-     * @see    https://developer.mozilla.org/en-US/docs/Web/API/Console/log
-     * @param  {Mixed}
      * @return {String}
      */
-    var debug = function () {
+    function currentStateUrl() {
 
-        if ( typeof console !== 'object' || ! console.log ) {
-            return;
+        var history = window.history;
+
+        if ( history.state !== null ) {
+            return history.state.url;
         }
 
-        return console.log.bind( console );
+        return window.location.href;
 
-    } ();
+    }
 
     /**
-     * Get a full url from a relative url.
+     * Does the browser support window.history and push state.
      *
-     * @todo   Remove hardcoded localhost URLs.
-     * @todo   Remove bypass.
-     *
-     * @param  {String} url
-     * @return {String} url
+     * @return {String} Browser mode
      */
-    function fullyQualifyUrl( url ) {
+    function getMode() {
 
-        var bypass = true;
-
-        if ( bypass ) {
-            return url;
+        if ( ! window.history || ! window.history.pushState || ! window.history.replaceState ) {
+            return 'traditional';
         }
 
-        if ( url.indexOf( 'http://' ) === -1 &&
-            url.indexOf( 'http://localhost:8000/' ) === -1 &&
-            url.substring( 0, 1 ) === '/' ) {
+        return 'dynamic';
 
-            url = 'http://localhost:8000/' + url;
+    }
 
+    /**
+     * If a target is set in state, use its scroll position.
+     *
+     * @return {Integer} The top of the scrollTarget, default is 0.
+     */
+    function getScrollTarget() {
+
+        var state = window.history.state || {};
+
+        if ( ! 'scrollTarget' in state ) {
+            return 0;
         }
 
-        // add trailing slash if need be
-        if ( url === 'http://localhost:8000/' &&
-            url.substring( url.length - 1, url.length ) !== '/' ) {
+        var $target = $( state.scrollTarget );
 
-            url += '/';
-
+        if ( ! $target.length ) {
+            return 0;
         }
 
-        return url;
+        return $target.first().offset().top;
 
     }
 
@@ -136,28 +129,13 @@
 
     }
 
-    /**
-     * Does the browser support window.history and push state.
-     *
-     * @return {String} Browser mode
-     */
-    function getMode() {
-
-        if ( ! window.history || ! window.history.pushState || ! window.history.replaceState ) {
-            return 'traditional';
-        }
-
-        return 'dynamic';
-
-    }
-
     //////////////////////////////////////////////////////////////////////////////////////
 
     return {
-        debug:            debug,
-        fullyQualifyUrl:  fullyQualifyUrl,
-        setDocumentTitle: setDocumentTitle,
-        getMode:          getMode
+        currentStateUrl:  currentStateUrl,
+        getMode:          getMode,
+        getScrollTarget:  getScrollTarget,
+        setDocumentTitle: setDocumentTitle
     };
 
 } ) );
@@ -193,10 +171,7 @@
 
 } ( window, function ( $, Util ) {
 
-    var name = 'Config',
-        debugEnabled = true,
-        debug = debugEnabled ? Util.debug : function () {},
-        config = {};
+    var config = {};
 
     //////////////////////////////////////////////////////////////////////////////////////
 
@@ -256,7 +231,7 @@
 
 } ) );
 /**
- * Push state into the browser history.
+ * Handle browser history.pushState() method.
  */
 ( function ( window, factory ) {
 
@@ -264,7 +239,7 @@
 
     if ( typeof define === 'function' && define.amd ) {
 
-        define( 'js/State',[
+        define( 'js/PushState',[
             'jquery',
             './Util'
         ], function ( $, Util ) {
@@ -283,7 +258,7 @@
 
         window.StateManager = window.StateManager || {};
 
-        window.StateManager.State = factory(
+        window.StateManager.PushState = factory(
             window,
             window.jQuery,
             window.StateManager.Util
@@ -295,9 +270,8 @@
 
     'use strict';
 
-    var name = 'State',
-        debugEnabled = true,
-        debug = debugEnabled ? Util.debug : function () {},
+    var $html = $( 'html' ),
+        $htmlBody = $( 'html, body' ),
         $window = $( window )
     ;
 
@@ -310,7 +284,8 @@
 
         $window
             .on( 'StateManager:AfterInitState', newState )
-            .on( 'StateManager:PushState', pushState );
+            .on( 'StateManager:PushState', pushState )
+        ;
 
     }
 
@@ -319,43 +294,21 @@
      */
     function newState() {
 
-        var scrollTarget = getScrollTarget();
+        var scrollTarget = Util.getScrollTarget();
 
-        if ( ! $( 'html' ).hasClass( 'initial-load' ) ) {
+        if ( ! $html.hasClass( 'initial-load' ) ) {
 
-            $( 'html, body' ).stop()
+            $htmlBody.stop()
                 .animate( {
                     scrollTop: scrollTarget
-                }, 200 );
+                }, 200 )
+            ;
 
         } else {
 
-            $( 'html' ).removeClass( 'initial-load' );
+            $html.removeClass( 'initial-load' );
 
         }
-
-    }
-
-    /**
-     * If a target is set in state, use its scroll position.
-     *
-     * @return {Integer} The top of the scrollTarget, default is 0.
-     */
-    function getScrollTarget() {
-
-        var state = window.history.state || {};
-
-        if ( ! 'scrollTarget' in state ) {
-            return 0;
-        }
-
-        var $target = $( state.scrollTarget );
-
-        if ( ! $target.length ) {
-            return 0;
-        }
-
-        return $target.first().offset().top;
 
     }
 
@@ -435,10 +388,7 @@
 
 } ( window, function ( window, $, Util ) {
 
-    var name = 'Loading',
-        debugEnabled = true,
-        debug = debugEnabled ? Util.debug : function () {},
-        $window = $( window ),
+    var $window = $( window ),
         $html = $( 'html' )
     ;
 
@@ -450,32 +400,8 @@
     function init() {
 
         $window
-            .on( 'StateManager:LoadingProgress', onLoadingProgress )
             .on( 'StateManager:LoadingReveal', reveal )
             .on( 'StateManager:LoadingComplete', hide );
-
-    }
-
-    /**
-     * ProgressEvent callback.
-     *
-     * @todo   There are issues when the response is gzipped.
-     * @todo   Should this be removed?
-     *
-     * @param  {Object} event
-     * @param  {Object} options
-     */
-    function onLoadingProgress( event, options ) {
-
-        var percentComplete = 0,
-            total = options.event.target.getResponseHeader( 'X-Content-Length' )
-        ;
-
-        if ( ! total ) {
-            return;
-        }
-
-        percentComplete = options.event.loaded / total;
 
     }
 
@@ -506,10 +432,9 @@
         define( 'js/Ajax',[
             'jquery',
             './Util',
-            './Config',
-            './State'
-        ], function ( $, Util, Config, State ) {
-            return factory( window, $, Util, Config, State );
+            './Config'
+        ], function ( $, Util, Config ) {
+            return factory( window, $, Util, Config );
         } );
 
     } else if ( typeof exports === 'object' ) {
@@ -518,8 +443,7 @@
             window,
             require( 'jquery' ),
             require( './Util' ),
-            require( './Config' ),
-            require( './State' )
+            require( './Config' )
         );
 
     } else {
@@ -530,20 +454,16 @@
             window,
             window.jQuery,
             window.StateManager.Util,
-            window.StateManager.Config,
-            window.StateManager.State
+            window.StateManager.Config
         );
 
     }
 
-} ( window, function ( window, $, Util, Config, State ) {
+} ( window, function ( window, $, Util, Config ) {
 
     'use strict';
 
-    var name = 'Ajax',
-        debugEnabled = true,
-        debug = debugEnabled ? Util.debug : function () {},
-        largestDownloadedLength = 0,
+    var largestDownloadedLength = 0,
         $window = $( window ),
         Options = null
     ;
@@ -568,17 +488,10 @@
             dataType:            'html',
             disableAfterSuccess: false,
             timeout:             ( 20 * 1000 ), // 20 seconds
-            trackProgress:       false,
             type:                'get'
         }, options );
 
         Options = options;
-
-        var browserSupportsXhr2 = window.ProgressEvent && window.FormData;
-
-        if ( browserSupportsXhr2 && request.trackProgress ) {
-            request.xhr = setRequestXhr;
-        }
 
         request.error = setRequestError;
         request.success = setRequestSuccess;
@@ -628,63 +541,6 @@
         Options.success( data, textStatus, jqXHR );
 
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Builds a new xhr object to monitor progress.
-     *
-     * @see  https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest#Monitoring_progress
-     */
-    function setRequestXhr() {
-
-        var thisXhr = new window.XMLHttpRequest();
-
-        // Upload progress
-        thisXhr.upload.addEventListener( 'progress', onUploadProgress, false );
-
-        // Download progress
-        thisXhr.addEventListener( 'progress', onDownloadProgress, false );
-
-        return thisXhr;
-
-    }
-
-    /**
-     * Upload ProgressEvent
-     *
-     * @fires  StateManager:LoadingProgress
-     * @param  {Object} event
-     */
-    function onUploadProgress( event ) {
-
-        $window.trigger( 'StateManager:LoadingProgress', {
-            event: event,
-            type: 'upload'
-        } );
-
-    }
-
-    /**
-     * Download ProgressEvent
-     *
-     * @fires  StateManager:LoadingProgress
-     * @param  {Object} event
-     */
-    function onDownloadProgress( event ) {
-
-        if ( event.loaded > largestDownloadedLength ) {
-            largestDownloadedLength = event.loaded;
-        }
-
-        $window.trigger( 'StateManager:LoadingProgress', {
-            event: event,
-            type: 'download'
-        } );
-
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Responsible for processing HTML content coming off the server.
@@ -773,7 +629,7 @@
         $.each( validLinks, function () {
 
             $( this )
-                .on( 'click.' + name, function ( event ) {
+                .on( 'click.StateManager', function ( event ) {
 
                     // Continue as normal for cmd clicks etc
                     if ( event.which === 2 || event.metaKey ) {
@@ -781,7 +637,7 @@
                     }
 
                     var $this = $( this ),
-                        url = Util.fullyQualifyUrl( $this.attr( 'href' ) )
+                        url = $this.attr( 'href' )
                     ;
 
                     $window.trigger( 'StateManager:GotoUrl', [ url, {
@@ -860,10 +716,7 @@
 
     'use strict';
 
-    var name = 'Manager',
-        debugEnabled = true,
-        debug = debugEnabled ? Util.debug : function () {},
-        initialized = false,
+    var initialized = false,
         history = window.history,
         mode = 'traditional',
         $contentHolder,
@@ -925,7 +778,7 @@
                 return;
             }
 
-            gotoUrl( currentStateUrl(), {
+            gotoUrl( Util.currentStateUrl(), {
                 popstate: true
             } );
 
@@ -955,7 +808,7 @@
             setWrappers();
 
             $window.trigger( 'StateManager:RecordPageview', {
-                url:   currentStateUrl(),
+                url:   Util.currentStateUrl(),
                 title: options.title
             } );
         }
@@ -977,10 +830,10 @@
 
         $( 'a[data-prefetch]' ).each( function ( index ) {
 
-            var url = Util.fullyQualifyUrl( $( this ).attr( 'href' ) );
+            var url = $( this ).attr( 'href' );
 
             // make sure we don't reload the page we're on
-            if ( url === currentStateUrl() ) {
+            if ( url === Util.currentStateUrl() ) {
                 return;
             }
 
@@ -1277,24 +1130,8 @@
             .on( 'StateManager:RenderUrl', renderUrl )
             .on( 'StateManager:InitState', function ( event, data ) {
                 initState( data );
-            } );
-
-    }
-
-    /**
-     * Get the current state URL from the history.
-     *
-     * @return {String}
-     */
-    function currentStateUrl() {
-
-        var history = window.history;
-
-        if ( history.state !== null ) {
-            return history.state.url;
-        }
-
-        return window.location.href;
+            } )
+        ;
 
     }
 
@@ -1320,7 +1157,7 @@
         define( 'js/Index',[
             './Util',
             './Config',
-            './State',
+            './PushState',
             './Loading',
             './Ajax',
             './Manager'
@@ -1331,7 +1168,7 @@
         module.exports = factory(
             require( './Util' ),
             require( './Config' ),
-            require( './State' ),
+            require( './PushState' ),
             require( './Loading' ),
             require( './Ajax' ),
             require( './Manager' )
@@ -1344,7 +1181,7 @@
         window.StateManager = factory(
             _StateManager.Util,
             _StateManager.Config,
-            _StateManager.State,
+            _StateManager.PushState,
             _StateManager.Loading,
             _StateManager.Ajax,
             _StateManager.Manager
@@ -1352,7 +1189,7 @@
 
     }
 
-} ( window, function ( Util, Config, State, Loading, Ajax, Manager ) {
+} ( window, function ( Util, Config, PushState, Loading, Ajax, Manager ) {
 
     'use strict';
 
@@ -1366,7 +1203,7 @@
         newConfig = newConfig || false;
 
         Config.init( newConfig );
-        State.init();
+        PushState.init();
         Loading.init();
         Manager.init();
 
@@ -1376,7 +1213,7 @@
 
     module.Util = Util;
     module.Config = Config;
-    module.State = State;
+    module.PushState = PushState;
     module.Loading = Loading;
     module.Ajax = Ajax;
     module.Manager = Manager;
