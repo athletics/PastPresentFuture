@@ -164,12 +164,12 @@
             var url = Util.fullyQualifyUrl( $( this ).attr( 'href' ) );
 
             // make sure we don't reload the page we're on
-            if ( url !== currentStateUrl() ) {
-                return
+            if ( url === currentStateUrl() ) {
+                return;
             }
 
             setTimeout( function () {
-                prefetchUrl( thisHref );
+                prefetchUrl( url );
             }, 50 * ( index + 1 ) );
 
         } );
