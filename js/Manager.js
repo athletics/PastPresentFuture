@@ -207,7 +207,9 @@
 
         data.prevBodyClasses = $body.attr( 'class' );
 
-        $ajaxContainer.html( data.data );
+        data.pageConfig = data.data.attr( 'data-page-config' );
+
+        $ajaxContainer.html( data.data.html() );
 
         Ajax.ajaxifyLinks( $ajaxContainer );
 
