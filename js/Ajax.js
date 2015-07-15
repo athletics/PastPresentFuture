@@ -72,17 +72,10 @@
             dataType:            'html',
             disableAfterSuccess: false,
             timeout:             ( 20 * 1000 ), // 20 seconds
-            trackProgress:       false,
             type:                'get'
         }, options );
 
         Options = options;
-
-        var browserSupportsXhr2 = window.ProgressEvent && window.FormData;
-
-        if ( browserSupportsXhr2 && request.trackProgress ) {
-            request.xhr = setRequestXhr;
-        }
 
         request.error = setRequestError;
         request.success = setRequestSuccess;
@@ -132,63 +125,6 @@
         Options.success( data, textStatus, jqXHR );
 
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Builds a new xhr object to monitor progress.
-     *
-     * @see  https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest#Monitoring_progress
-     */
-    function setRequestXhr() {
-
-        var thisXhr = new window.XMLHttpRequest();
-
-        // Upload progress
-        thisXhr.upload.addEventListener( 'progress', onUploadProgress, false );
-
-        // Download progress
-        thisXhr.addEventListener( 'progress', onDownloadProgress, false );
-
-        return thisXhr;
-
-    }
-
-    /**
-     * Upload ProgressEvent
-     *
-     * @fires  StateManager:LoadingProgress
-     * @param  {Object} event
-     */
-    function onUploadProgress( event ) {
-
-        $window.trigger( 'StateManager:LoadingProgress', {
-            event: event,
-            type: 'upload'
-        } );
-
-    }
-
-    /**
-     * Download ProgressEvent
-     *
-     * @fires  StateManager:LoadingProgress
-     * @param  {Object} event
-     */
-    function onDownloadProgress( event ) {
-
-        if ( event.loaded > largestDownloadedLength ) {
-            largestDownloadedLength = event.loaded;
-        }
-
-        $window.trigger( 'StateManager:LoadingProgress', {
-            event: event,
-            type: 'download'
-        } );
-
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Responsible for processing HTML content coming off the server.

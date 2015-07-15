@@ -51,32 +51,8 @@
     function init() {
 
         $window
-            .on( 'StateManager:LoadingProgress', onLoadingProgress )
             .on( 'StateManager:LoadingReveal', reveal )
             .on( 'StateManager:LoadingComplete', hide );
-
-    }
-
-    /**
-     * ProgressEvent callback.
-     *
-     * @todo   There are issues when the response is gzipped.
-     * @todo   Should this be removed?
-     *
-     * @param  {Object} event
-     * @param  {Object} options
-     */
-    function onLoadingProgress( event, options ) {
-
-        var percentComplete = 0,
-            total = options.event.target.getResponseHeader( 'X-Content-Length' )
-        ;
-
-        if ( ! total ) {
-            return;
-        }
-
-        percentComplete = options.event.loaded / total;
 
     }
 
