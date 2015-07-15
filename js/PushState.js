@@ -1,5 +1,5 @@
 /**
- * Push state into the browser history.
+ * Handle browser history.pushState() method.
  */
 ( function ( window, factory ) {
 
@@ -26,7 +26,7 @@
 
         window.StateManager = window.StateManager || {};
 
-        window.StateManager.State = factory(
+        window.StateManager.PushState = factory(
             window,
             window.jQuery,
             window.StateManager.Util
@@ -38,9 +38,8 @@
 
     'use strict';
 
-    var name = 'State',
-        debugEnabled = true,
-        debug = debugEnabled ? Util.debug : function () {},
+    var $html = $( 'html' ),
+        $htmlBody = $( 'html, body' ),
         $window = $( window )
     ;
 
@@ -53,7 +52,8 @@
 
         $window
             .on( 'StateManager:AfterInitState', newState )
-            .on( 'StateManager:PushState', pushState );
+            .on( 'StateManager:PushState', pushState )
+        ;
 
     }
 
@@ -62,43 +62,21 @@
      */
     function newState() {
 
-        var scrollTarget = getScrollTarget();
+        var scrollTarget = Util.getScrollTarget();
 
-        if ( ! $( 'html' ).hasClass( 'initial-load' ) ) {
+        if ( ! $html.hasClass( 'initial-load' ) ) {
 
-            $( 'html, body' ).stop()
+            $htmlBody.stop()
                 .animate( {
                     scrollTop: scrollTarget
-                }, 200 );
+                }, 200 )
+            ;
 
         } else {
 
-            $( 'html' ).removeClass( 'initial-load' );
+            $html.removeClass( 'initial-load' );
 
         }
-
-    }
-
-    /**
-     * If a target is set in state, use its scroll position.
-     *
-     * @return {Integer} The top of the scrollTarget, default is 0.
-     */
-    function getScrollTarget() {
-
-        var state = window.history.state || {};
-
-        if ( ! 'scrollTarget' in state ) {
-            return 0;
-        }
-
-        var $target = $( state.scrollTarget );
-
-        if ( ! $target.length ) {
-            return 0;
-        }
-
-        return $target.first().offset().top;
 
     }
 
