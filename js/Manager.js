@@ -256,6 +256,11 @@
         options = options || {};
         options = $.extend( { url: url, popstate: false }, options );
 
+        // Do not navigate to the current URL.
+        if ( window.location.href === Util.getAbsoluteUrl( url ) ) {
+            return;
+        }
+
         $window
             .off( 'StateManager:FetchedData' )
             .on( 'StateManager:FetchedData', function ( event, data ) {
