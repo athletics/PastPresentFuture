@@ -331,6 +331,8 @@
 
     /**
      * Handle how the page updates depending on the browser's use of history.
+     * @param  {Object} event  Passed from the trigger, unused
+     * @param  {Object} object Contains options for pushState, Page Title, & Page URL
      */
     function pushState( event, object ) {
 
