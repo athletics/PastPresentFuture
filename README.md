@@ -158,7 +158,6 @@ Custom jQuery events prefixed with `StateManager`.
 | [`StateManager:NewState`](#statemanagernewstate)                   | internal        |
 | [`StateManager:PopState`](#statemanagerpopstate)                   | internal        |
 | [`StateManager:LoadingReveal`](#statemanagerloadingreveal)         | internal        |
-| [`StateManager:LoadingProgress`](#statemanagerloadingprogress)     | internal        |
 | [`StateManager:LoadingComplete`](#statemanagerloadingcomplete)     | internal        |
 | [`StateManager:GotoUrl`](#statemanagergotourl)                     | both            |
 | [`StateManager:RecordPageview`](#statemanagerrecordpageview)       | internal        |
@@ -166,6 +165,7 @@ Custom jQuery events prefixed with `StateManager`.
 | [`StateManager:FetchedData`](#statemanagerfetcheddata)             | internal        |
 | [`StateManager:BeforeTransition`](#statemanagerbeforetransition)   | internal        |
 | [`StateManager:AnimateTransition`](#statemanageranimatetransition) | internal        |
+| [`StateManager:ResetPage`](#statemanagerresetpage)                 | internal        |
 
 ### `StateManager:AfterInitState`
 
@@ -195,49 +195,54 @@ Custom jQuery events prefixed with `StateManager`.
 
 ### `StateManager:PopState`
 
-**Description:**
+**Description:** This event is called when the history is changed by browser forward and back buttons.
 
 [:arrow_up:](#events)
 
 ### `StateManager:LoadingReveal`
 
-**Description:**
-
-[:arrow_up:](#events)
-
-### `StateManager:LoadingProgress`
-
-**Description:**
+**Description:** Called while data from the new page is being loaded into memory.
 
 [:arrow_up:](#events)
 
 ### `StateManager:LoadingComplete`
 
-**Description:**
+**Description:** Called just before data is rendered to the DOM.
 
 [:arrow_up:](#events)
 
 ### `StateManager:GotoUrl`
 
-**Description:**
+**Description:** A trigger to be used for loading a new page. Accepts the URL and Options for pushState.
+
+**Parameters:**
+
+`url` {String} The url of the page to go to.
+`options` {Object}
+
+| name       | type    | description                                 |
+| ---------- | ------- | ------------------------------------------- |
+| `url`      | String  | The url of the page to go to.               |
+| `popstate` | Boolean | Optional, set to `false` by default.        |
+| `options`  | Object  | Optional, specifically  used for pushState. |
 
 [:arrow_up:](#events)
 
 ### `StateManager:RecordPageview`
 
-**Description:**
+**Description:** Called on init state, passes the current URL and page title.
 
 [:arrow_up:](#events)
 
 ### `StateManager:RenderUrl`
 
-**Description:**
+**Description:** This event is called after a page is fetch for processing the data.
 
 [:arrow_up:](#events)
 
 ### `StateManager:FetchedData`
 
-**Description:**
+**Description:** Event for passing data if a page has already been cached.
 
 [:arrow_up:](#events)
 
@@ -256,7 +261,13 @@ Custom jQuery events prefixed with `StateManager`.
 
 ### `StateManager:AnimateTransition`
 
-**Description:**
+**Description:** This event is called when the `content` and `ajaxContainer` set in the Config aren’t the same. It's called after LoadingComplete is triggered.
+
+[:arrow_up:](#events)
+
+## `StateManager:ResetPage`
+
+**Description:** This event is fired when the app tries to reload the page it is already on. This is particularly useful if the current page has javascript elements that need to be reset.
 
 [:arrow_up:](#events)
 
