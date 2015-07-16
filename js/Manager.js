@@ -258,6 +258,7 @@
 
         // Do not navigate to the current URL.
         if ( window.location.href === Util.getAbsoluteUrl( url ) ) {
+            $window.trigger( 'StateManager:ResetPage' );
             return;
         }
 
