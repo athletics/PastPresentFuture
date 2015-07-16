@@ -59,6 +59,22 @@
     }
 
     /**
+     * Clever way to get an absolute URL.
+     *
+     * @param  {String} url Either absolute or relative.
+     * @return {String}     Definitely absolute.
+     */
+    function getAbsoluteUrl( url ) {
+
+        var a = document.createElement( 'a' );
+
+        a.href = url;
+
+        return a.href;
+
+    }
+
+    /**
      * Does the browser support window.history and push state.
      *
      * @return {String} Browser mode
@@ -133,6 +149,7 @@
 
     return {
         currentStateUrl:  currentStateUrl,
+        getAbsoluteUrl:   getAbsoluteUrl,
         getMode:          getMode,
         getScrollTarget:  getScrollTarget,
         setDocumentTitle: setDocumentTitle
