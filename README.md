@@ -1,6 +1,6 @@
 # StateManager
 
-A JavaScipt library for manipulating browser history with pushState and Ajax.
+A JavaScipt library for manipulating browser history with pushState and AJAX.
 
 ## Introduction
 
