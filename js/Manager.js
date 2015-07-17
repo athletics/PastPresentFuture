@@ -257,7 +257,7 @@
         options = $.extend( { url: url, popstate: false }, options );
 
         // Do not navigate to the current URL.
-        if ( window.location.href === Util.getAbsoluteUrl( url ) ) {
+        if ( window.location.href === Util.getAbsoluteUrl( url ) && ! options.popstate ) {
             $window.trigger( 'StateManager:ResetPage' );
             return;
         }
