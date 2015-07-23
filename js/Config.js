@@ -45,7 +45,8 @@
             content: '.page_content_holder',
             ajaxContainer: '.page_content_holder',
             prefetchCacheLimit: 15,
-            ajaxCacheLimit: 15
+            ajaxCacheLimit: 15,
+            onParseHtml: false
         }, newConfig );
 
     }

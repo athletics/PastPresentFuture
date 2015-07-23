@@ -128,13 +128,14 @@
      */
     function parseHtml( data ) {
 
-        data = $.parseHTML( data, document, true );
-
         var marker = Config.get( 'content' ),
-            $data = $( data )
+            onParseHtml = Config.get( 'onParseHtml' ),
+            $data = $( $.parseHTML( data, document, true ) )
         ;
 
-        return $data.filter( marker ).add( $data.find( marker ) );
+        $data = $data.filter( marker ).add( $data.find( marker ) );
+
+        return $.isFunction( onParseHtml ) ? onParseHtml( $data ) : $data;
 
     }
 
