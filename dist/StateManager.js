@@ -590,7 +590,7 @@
         data = $.parseHTML( data.match( /<head[^>]*>([\s\S.]*)<\/head>/i )[0], document, true );
 
         var $data = $( data ),
-            titles =$data.filter( 'title' )
+            titles = $data.filter( 'title' )
         ;
 
         return titles.last().text();
