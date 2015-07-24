@@ -32,8 +32,8 @@ var rjs = function ( name, out, optimize ) {
 };
 
 gulp.task( 'js', function () {
-    rjs( './js/Index', './dist/StateManager', false );
-    rjs( './js/Index', './dist/StateManager', true );
+    rjs( './js/Index', './dist/PastPresentFuture', false );
+    rjs( './js/Index', './dist/PastPresentFuture', true );
 } );
 
 gulp.task( 'watch', function () {
