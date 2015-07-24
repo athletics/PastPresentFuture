@@ -81,20 +81,14 @@ If package managers are not your thing, the library can be downloaded directly f
 
 ## Configuration
 
-A configuration object is required to initialize the Ad Manager.
 
-content: '.page_content_holder',
-ajaxContainer: '.page_content_holder',
-prefetchCacheLimit: 15,
-ajaxCacheLimit: 15
-
-
-| key                                          | type    |
-| -------------------------------------------- | ------- |
-| [`content`](#content)                        | String  |
-| [`ajaxContainer`](#ajaxcontainer)            | String  |
-| [`prefetchCacheLimit`](#prefetchcachelimit)  | Integer |
-| [`ajaxCacheLimit`](#ajaxcachelimit)          | Integer |
+| key                                          | type     |
+| -------------------------------------------- | -------- |
+| [`content`](#content)                        | String   |
+| [`ajaxContainer`](#ajaxcontainer)            | String   |
+| [`prefetchCacheLimit`](#prefetchcachelimit)  | Integer  |
+| [`ajaxCacheLimit`](#ajaxcachelimit)          | Integer  |
+| [`onParseHtml`](#onparsehtml)                | Function |
 
 **Example Configuration:**
 
@@ -144,6 +138,16 @@ ajaxCacheLimit: 15
 **Default:** `15`
 
 **Description:** This declares the limit of the cache on pages that have already been visited that are not already in the prefetch cache.
+
+[:arrow_up:](#configuration)
+
+### `onParseHtml`
+
+**Type:** Function
+
+**Default:** None.
+
+**Description:** Callback to filter the HTML before insertion into the DOM. Must return the HTML collection.
 
 [:arrow_up:](#configuration)
 
