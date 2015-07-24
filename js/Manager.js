@@ -28,14 +28,14 @@
 
     } else {
 
-        window.StateManager = window.StateManager || {};
+        window.PastPresentFuture = window.PastPresentFuture || {};
 
-        window.StateManager.Manager = factory(
+        window.PastPresentFuture.Manager = factory(
             window,
             window.jQuery,
-            window.StateManager.Util,
-            window.StateManager.Config,
-            window.StateManager.Ajax
+            window.PastPresentFuture.Util,
+            window.PastPresentFuture.Config,
+            window.PastPresentFuture.Ajax
         );
 
     }
@@ -110,7 +110,7 @@
                 popstate: true
             } );
 
-            $window.trigger( 'StateManager:PopState' );
+            $window.trigger( 'PastPresentFuture:PopState' );
 
         } );
 
@@ -135,7 +135,7 @@
             Util.setDocumentTitle( options.title );
             setWrappers();
 
-            $window.trigger( 'StateManager:RecordPageview', {
+            $window.trigger( 'PastPresentFuture:RecordPageview', {
                 url:   Util.currentStateUrl(),
                 title: options.title
             } );
@@ -143,7 +143,7 @@
 
         prefetchUpcomingUrls();
 
-        $window.trigger( 'StateManager:AfterInitState' );
+        $window.trigger( 'PastPresentFuture:AfterInitState' );
 
     }
 
@@ -184,7 +184,7 @@
 
         if ( Config.get( 'content' ) !== Config.get( 'ajaxContainer' ) ) {
 
-            $window.trigger( 'StateManager:BeforeTransition', {
+            $window.trigger( 'PastPresentFuture:BeforeTransition', {
                 contentHolder: $contentHolder,
                 ajaxContainer: $ajaxContainer
             } );
@@ -214,7 +214,7 @@
 
         if ( Config.get( 'content' ) !== Config.get( 'ajaxContainer' ) ) {
 
-            $window.trigger( 'StateManager:AnimateTransition', data );
+            $window.trigger( 'PastPresentFuture:AnimateTransition', data );
 
         } else {
 
@@ -234,12 +234,12 @@
         if ( isLoading ) {
 
             // reveal loading state
-            $window.trigger( 'StateManager:LoadingReveal' );
+            $window.trigger( 'PastPresentFuture:LoadingReveal' );
 
         } else {
 
             // hide loading state
-            $window.trigger( 'StateManager:LoadingComplete' );
+            $window.trigger( 'PastPresentFuture:LoadingComplete' );
 
         }
 
@@ -258,13 +258,13 @@
 
         // Do not navigate to the current URL.
         if ( window.location.href === Util.getAbsoluteUrl( url ) && ! options.popstate ) {
-            $window.trigger( 'StateManager:ResetPage' );
+            $window.trigger( 'PastPresentFuture:ResetPage' );
             return;
         }
 
         $window
-            .off( 'StateManager:FetchedData' )
-            .on( 'StateManager:FetchedData', function ( event, data ) {
+            .off( 'PastPresentFuture:FetchedData' )
+            .on( 'PastPresentFuture:FetchedData', function ( event, data ) {
 
                 // Only proceed for currently request url.
                 if ( data.url !== url ) {
@@ -274,15 +274,15 @@
                 if ( ! options.popstate ) {
                     // history.pushState has to happen before rendering.
                     // Otherwise the page title in the history gets messed up.
-                    $window.trigger( 'StateManager:PushState', options );
+                    $window.trigger( 'PastPresentFuture:PushState', options );
                 }
 
                 toggleLoading( false );
 
-                $window.trigger( 'StateManager:RenderUrl', data );
+                $window.trigger( 'PastPresentFuture:RenderUrl', data );
 
                 // Unbind window event.
-                $( this ).off( 'StateManager:FetchedData' );
+                $( this ).off( 'PastPresentFuture:FetchedData' );
 
             } );
 
@@ -293,7 +293,7 @@
                 // save the new data to the cache
                 data = saveCacheData( ajaxCache, xhr.requestUrl, data );
 
-                $window.trigger( 'StateManager:FetchedData', data );
+                $window.trigger( 'PastPresentFuture:FetchedData', data );
 
             }
         } );
@@ -319,11 +319,11 @@
         ;
 
         if ( data = checkCacheForData( ajaxCache.list, options.url ) ) {
-            return $window.trigger( 'StateManager:FetchedData', data );
+            return $window.trigger( 'PastPresentFuture:FetchedData', data );
         }
 
         if ( data = checkCacheForData( prefetchCache.list, options.url ) ) {
-            return $window.trigger( 'StateManager:FetchedData', data );
+            return $window.trigger( 'PastPresentFuture:FetchedData', data );
         }
 
         if ( data = checkCacheForData( ajaxQueue, options.url ) ) {
@@ -370,7 +370,7 @@
                 removeUrlFromAjaxQueue( url );
                 data = saveCacheData( prefetchCache, url, data );
 
-                $window.trigger( 'StateManager:FetchedData', data );
+                $window.trigger( 'PastPresentFuture:FetchedData', data );
             }
         } );
 
@@ -458,11 +458,11 @@
     function ajaxEventListener() {
 
         $window
-            .on( 'StateManager:GotoUrl', function ( event, url, options ) {
+            .on( 'PastPresentFuture:GotoUrl', function ( event, url, options ) {
                 gotoUrl( url, options );
             } )
-            .on( 'StateManager:RenderUrl', renderUrl )
-            .on( 'StateManager:InitState', function ( event, data ) {
+            .on( 'PastPresentFuture:RenderUrl', renderUrl )
+            .on( 'PastPresentFuture:InitState', function ( event, data ) {
                 initState( data );
             } )
         ;

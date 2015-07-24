@@ -1,18 +1,18 @@
 {
-  "name": "statemanager",
+  "name": "pastpresentfuture",
   "version": "0.1.0",
   "description": "Where have we been? Where are we going?",
   "main": "src/Index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/athletics/StateManager.git"
+    "url": "https://github.com/athletics/PastPresentFuture.git"
   },
   "author": {
     "name": "Athletics",
     "url": "http://athleticsnyc.com"
   },
   "license": "Apache-2.0",
-  "homepage": "https://github.com/athletics/StateManager",
+  "homepage": "https://github.com/athletics/PastPresentFuture",
   "devDependencies": {
     "gulp": "^3.8.11",
     "gulp-cli": "^0.2.0",

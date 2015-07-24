@@ -1,12 +1,12 @@
 {
-  "name": "statemanager",
+  "name": "pastpresentfuture",
   "version": "0.1.0",
-  "homepage": "https://github.com/athletics/StateManager",
+  "homepage": "https://github.com/athletics/PastPresentFuture",
   "authors": [
     "Athletics"
   ],
   "description": "Where have we been? Where are we going?",
-  "main": "dist/StateManager.min.js",
+  "main": "dist/PastPresentFuture.min.js",
   "moduleType": [
     "amd",
     "globals",

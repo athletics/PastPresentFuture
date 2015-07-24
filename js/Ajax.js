@@ -26,13 +26,13 @@
 
     } else {
 
-        window.StateManager = window.StateManager || {};
+        window.PastPresentFuture = window.PastPresentFuture || {};
 
-        window.StateManager.Ajax = factory(
+        window.PastPresentFuture.Ajax = factory(
             window,
             window.jQuery,
-            window.StateManager.Util,
-            window.StateManager.Config
+            window.PastPresentFuture.Util,
+            window.PastPresentFuture.Config
         );
 
     }
@@ -208,7 +208,7 @@
         $.each( validLinks, function () {
 
             $( this )
-                .on( 'click.StateManager', function ( event ) {
+                .on( 'click.PastPresentFuture', function ( event ) {
 
                     // Continue as normal for cmd clicks etc
                     if ( event.which === 2 || event.metaKey ) {
@@ -219,7 +219,7 @@
                         url = $this.attr( 'href' )
                     ;
 
-                    $window.trigger( 'StateManager:GotoUrl', [ url, {
+                    $window.trigger( 'PastPresentFuture:GotoUrl', [ url, {
                         url: url,
                         options: {
                             scrollPos: parseInt( $( document ).scrollTop(), 10 ),

@@ -1,5 +1,5 @@
 /**
- * Builds the StateManager prototype.
+ * Builds the PastPresentFuture prototype.
  * This file should be required directly for CommonJS usage.
  *
  * @see  http://requirejs.org/docs/commonjs.html#intro On CommonJS Transport.
@@ -32,15 +32,15 @@
 
     } else {
 
-        var _StateManager = window.StateManager;
+        var _PastPresentFuture = window.PastPresentFuture;
 
-        window.StateManager = factory(
-            _StateManager.Util,
-            _StateManager.Config,
-            _StateManager.PushState,
-            _StateManager.Loading,
-            _StateManager.Ajax,
-            _StateManager.Manager
+        window.PastPresentFuture = factory(
+            _PastPresentFuture.Util,
+            _PastPresentFuture.Config,
+            _PastPresentFuture.PushState,
+            _PastPresentFuture.Loading,
+            _PastPresentFuture.Ajax,
+            _PastPresentFuture.Manager
         );
 
     }
@@ -50,11 +50,11 @@
     'use strict';
 
     /**
-     * StateManager prototype.
+     * PastPresentFuture prototype.
      *
      * @param  {Object} newConfig Optional configuration for initialization.
      */
-    function StateManager( newConfig ) {
+    function PastPresentFuture( newConfig ) {
 
         newConfig = newConfig || false;
 
@@ -65,7 +65,7 @@
 
     }
 
-    var module = StateManager.prototype;
+    var module = PastPresentFuture.prototype;
 
     module.Util = Util;
     module.Config = Config;
@@ -74,6 +74,6 @@
     module.Ajax = Ajax;
     module.Manager = Manager;
 
-    return StateManager;
+    return PastPresentFuture;
 
 } ) );

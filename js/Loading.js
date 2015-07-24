@@ -24,12 +24,12 @@
 
     } else {
 
-        window.StateManager = window.StateManager || {};
+        window.PastPresentFuture = window.PastPresentFuture || {};
 
-        window.StateManager.Loading = factory(
+        window.PastPresentFuture.Loading = factory(
             window,
             window.jQuery,
-            window.StateManager.Util
+            window.PastPresentFuture.Util
         );
 
     }
@@ -48,8 +48,8 @@
     function init() {
 
         $window
-            .on( 'StateManager:LoadingReveal', reveal )
-            .on( 'StateManager:LoadingComplete', hide );
+            .on( 'PastPresentFuture:LoadingReveal', reveal )
+            .on( 'PastPresentFuture:LoadingComplete', hide );
 
     }
 

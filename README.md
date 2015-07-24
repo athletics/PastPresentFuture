@@ -1,10 +1,10 @@
-# StateManager
+# PastPresentFuture
 
 A JavaScipt library for manipulating browser history with pushState and AJAX.
 
 ## Introduction
 
-StateManager is a JavaScript library for interacting with [history.pushState()](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history) while loading internal URLs with [AJAX](https://developer.mozilla.org/en-US/docs/AJAX). The goal is to maintain a single load of CSS and JS assets per user session, speeding up page changes for time-on-site retention with increased page views. Below you will find documentation on its configuration and usage.
+PastPresentFuture is a JavaScript library for interacting with [history.pushState()](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history) while loading internal URLs with [AJAX](https://developer.mozilla.org/en-US/docs/AJAX). The goal is to maintain a single load of CSS and JS assets per user session, speeding up page changes for time-on-site retention with increased page views. Below you will find documentation on its configuration and usage.
 
 - [Installation](#installation)
 - [Basic Usage](#basicusage)
@@ -17,33 +17,33 @@ StateManager is a JavaScript library for interacting with [history.pushState()](
 
 ### Bower
 
-Use the [Bower](http://bower.io/) package manager to install StateManager into your project. To do so you can either use the CLI:
+Use the [Bower](http://bower.io/) package manager to install PastPresentFuture into your project. To do so you can either use the CLI:
 
 ```bash
-$ bower install statemanager --save
+$ bower install pastpresentfuture --save
 ```
 
 Or define it in your bower.json manifest:
 
 ```javascript
     "dependencies": {
-        "statemanager": "latest"
+        "pastpresentfuture": "latest"
     }
 ```
 
 ### npm
 
-Similarly, StateManager can be installed using [npm](https://www.npmjs.com/). To do so you can either use the CLI:
+Similarly, PastPresentFuture can be installed using [npm](https://www.npmjs.com/). To do so you can either use the CLI:
 
 ```bash
-$ npm install statemanager --save
+$ npm install pastpresentfuture --save
 ```
 
 Or define it in your package.json manifest:
 
 ```javascript
     "dependencies": {
-        "statemanager": "latest"
+        "pastpresentfuture": "latest"
     }
 ```
 
@@ -58,9 +58,9 @@ If package managers are not your thing, the library can be downloaded directly f
 <html>
 <head>
     <meta charset="utf-8">
-    <title>StateManager Usage</title>
+    <title>PastPresentFuture Usage</title>
     <script src="jquery.js"></script>
-    <script src="StateManager.min.js"></script>
+    <script src="PastPresentFuture.min.js"></script>
 </head>
 <body>
     <!--
@@ -71,7 +71,7 @@ If package managers are not your thing, the library can be downloaded directly f
     <script type="text/javascript">
         ( function () {
 
-            StateManager();
+            PastPresentFuture();
 
         } () );
     </script>
@@ -153,31 +153,31 @@ If package managers are not your thing, the library can be downloaded directly f
 
 ## Events
 
-Custom jQuery events prefixed with `StateManager`.
+Custom jQuery events prefixed with `PastPresentFuture`.
 
-| event                                                              | trigger source  |
-| ------------------------------------------------------------------ | --------------- |
-| [`StateManager:AfterInitState`](#statemanagerafterinitstate)       | internal        |
-| [`StateManager:PushState`](#statemanagerpushstate)                 | internal        |
-| [`StateManager:NewState`](#statemanagernewstate)                   | internal        |
-| [`StateManager:PopState`](#statemanagerpopstate)                   | internal        |
-| [`StateManager:LoadingReveal`](#statemanagerloadingreveal)         | internal        |
-| [`StateManager:LoadingComplete`](#statemanagerloadingcomplete)     | internal        |
-| [`StateManager:GotoUrl`](#statemanagergotourl)                     | both            |
-| [`StateManager:RecordPageview`](#statemanagerrecordpageview)       | internal        |
-| [`StateManager:RenderUrl`](#statemanagerrenderurl)                 | internal        |
-| [`StateManager:FetchedData`](#statemanagerfetcheddata)             | internal        |
-| [`StateManager:BeforeTransition`](#statemanagerbeforetransition)   | internal        |
-| [`StateManager:AnimateTransition`](#statemanageranimatetransition) | internal        |
-| [`StateManager:ResetPage`](#statemanagerresetpage)                 | internal        |
+| event                                                                        | trigger source  |
+| ---------------------------------------------------------------------------- | --------------- |
+| [`PastPresentFuture:AfterInitState`](#pastpresentfutureafterinitstate)       | internal        |
+| [`PastPresentFuture:PushState`](#pastpresentfuturepushstate)                 | internal        |
+| [`PastPresentFuture:NewState`](#pastpresentfuturenewstate)                   | internal        |
+| [`PastPresentFuture:PopState`](#pastpresentfuturepopstate)                   | internal        |
+| [`PastPresentFuture:LoadingReveal`](#pastpresentfutureloadingreveal)         | internal        |
+| [`PastPresentFuture:LoadingComplete`](#pastpresentfutureloadingcomplete)     | internal        |
+| [`PastPresentFuture:GotoUrl`](#pastpresentfuturegotourl)                     | both            |
+| [`PastPresentFuture:RecordPageview`](#pastpresentfuturerecordpageview)       | internal        |
+| [`PastPresentFuture:RenderUrl`](#pastpresentfuturerenderurl)                 | internal        |
+| [`PastPresentFuture:FetchedData`](#pastpresentfuturefetcheddata)             | internal        |
+| [`PastPresentFuture:BeforeTransition`](#pastpresentfuturebeforetransition)   | internal        |
+| [`PastPresentFuture:AnimateTransition`](#pastpresentfutureanimatetransition) | internal        |
+| [`PastPresentFuture:ResetPage`](#pastpresentfutureresetpage)                 | internal        |
 
-### `StateManager:AfterInitState`
+### `PastPresentFuture:AfterInitState`
 
 **Description:** Called on initial load and after pushState.
 
 [:arrow_up:](#events)
 
-### `StateManager:PushState`
+### `PastPresentFuture:PushState`
 
 **Description:** An event wrapper for `history.pushState()`. It is called before render of AJAX data.
 
@@ -191,31 +191,31 @@ Custom jQuery events prefixed with `StateManager`.
 
 [:arrow_up:](#events)
 
-### `StateManager:NewState`
+### `PastPresentFuture:NewState`
 
 **Description:** Called after pushState.
 
 [:arrow_up:](#events)
 
-### `StateManager:PopState`
+### `PastPresentFuture:PopState`
 
 **Description:** This event is called when the history is changed by browser forward and back buttons.
 
 [:arrow_up:](#events)
 
-### `StateManager:LoadingReveal`
+### `PastPresentFuture:LoadingReveal`
 
 **Description:** Called while data from the new page is being loaded into memory.
 
 [:arrow_up:](#events)
 
-### `StateManager:LoadingComplete`
+### `PastPresentFuture:LoadingComplete`
 
 **Description:** Called just before data is rendered to the DOM.
 
 [:arrow_up:](#events)
 
-### `StateManager:GotoUrl`
+### `PastPresentFuture:GotoUrl`
 
 **Description:** A trigger to be used for loading a new page. Accepts the URL and Options for pushState.
 
@@ -232,25 +232,25 @@ Custom jQuery events prefixed with `StateManager`.
 
 [:arrow_up:](#events)
 
-### `StateManager:RecordPageview`
+### `PastPresentFuture:RecordPageview`
 
 **Description:** Called on init state, passes the current URL and page title.
 
 [:arrow_up:](#events)
 
-### `StateManager:RenderUrl`
+### `PastPresentFuture:RenderUrl`
 
 **Description:** This event is called after a page is fetch for processing the data.
 
 [:arrow_up:](#events)
 
-### `StateManager:FetchedData`
+### `PastPresentFuture:FetchedData`
 
 **Description:** Event for passing data if a page has already been cached.
 
 [:arrow_up:](#events)
 
-### `StateManager:BeforeTransition`
+### `PastPresentFuture:BeforeTransition`
 
 **Description:** This event is called when the `content` and `ajaxContainer` set in the Config aren’t the same.
 
@@ -263,13 +263,13 @@ Custom jQuery events prefixed with `StateManager`.
 
 [:arrow_up:](#events)
 
-### `StateManager:AnimateTransition`
+### `PastPresentFuture:AnimateTransition`
 
 **Description:** This event is called when the `content` and `ajaxContainer` set in the Config aren’t the same. It's called after LoadingComplete is triggered.
 
 [:arrow_up:](#events)
 
-## `StateManager:ResetPage`
+## `PastPresentFuture:ResetPage`
 
 **Description:** This event is fired when the library tries to reload the page it is already on. This is particularly useful if the current page has javascript elements that need to be reset.
 
@@ -279,7 +279,7 @@ Custom jQuery events prefixed with `StateManager`.
 
 ### Coding Style
 
-StateManager follows the [WordPress JavaScript Coding Standards](https://make.wordpress.org/core/handbook/coding-standards/javascript/). There is a [`.jscsrc`](https://github.com/athletics/ad-manager/blob/master/.jscsrc) included in the project for automatic linting using [JSCS](http://jscs.info/).
+PastPresentFuture follows the [WordPress JavaScript Coding Standards](https://make.wordpress.org/core/handbook/coding-standards/javascript/). There is a [`.jscsrc`](https://github.com/athletics/ad-manager/blob/master/.jscsrc) included in the project for automatic linting using [JSCS](http://jscs.info/).
 
 The modules are written in the [UMD](https://github.com/umdjs/umd) pattern to support AMD, CommonJS, and global usage.
 
@@ -289,4 +289,4 @@ The project contains a gulpfile.js for concatenation and minification. To use fi
 
 ## Dependencies
 
-StateManager requires jQuery.
+PastPresentFuture requires jQuery.

@@ -1,8 +1,8 @@
 /*!
- * statemanager - Where have we been? Where are we going?
+ * pastpresentfuture - Where have we been? Where are we going?
  *
  * @author Athletics - http://athleticsnyc.com
- * @see https://github.com/athletics/StateManager
+ * @see https://github.com/athletics/PastPresentFuture
  * @version 0.1.0
  *//**
  * Shared utilities.
@@ -28,9 +28,9 @@
 
     } else {
 
-        window.StateManager = window.StateManager || {};
+        window.PastPresentFuture = window.PastPresentFuture || {};
 
-        window.StateManager.Util = factory(
+        window.PastPresentFuture.Util = factory(
             window,
             window.jQuery
         );
@@ -177,11 +177,11 @@
 
     } else {
 
-        window.StateManager = window.StateManager || {};
+        window.PastPresentFuture = window.PastPresentFuture || {};
 
-        window.StateManager.Config = factory(
+        window.PastPresentFuture.Config = factory(
             window.jQuery,
-            window.StateManager.Util
+            window.PastPresentFuture.Util
         );
 
     }
@@ -195,7 +195,7 @@
     /**
      * Initialize the config module.
      *
-     * @param  {Object} newConfig The StateManager config object.
+     * @param  {Object} newConfig The PastPresentFuture config object.
      */
     function init( newConfig ) {
 
@@ -274,12 +274,12 @@
 
     } else {
 
-        window.StateManager = window.StateManager || {};
+        window.PastPresentFuture = window.PastPresentFuture || {};
 
-        window.StateManager.PushState = factory(
+        window.PastPresentFuture.PushState = factory(
             window,
             window.jQuery,
-            window.StateManager.Util
+            window.PastPresentFuture.Util
         );
 
     }
@@ -301,8 +301,8 @@
     function init() {
 
         $window
-            .on( 'StateManager:AfterInitState', newState )
-            .on( 'StateManager:PushState', pushState )
+            .on( 'PastPresentFuture:AfterInitState', newState )
+            .on( 'PastPresentFuture:PushState', pushState )
         ;
 
     }
@@ -356,7 +356,7 @@
                 object.url
             );
 
-            $window.trigger( 'StateManager:NewState' );
+            $window.trigger( 'PastPresentFuture:NewState' );
 
         }
 
@@ -396,12 +396,12 @@
 
     } else {
 
-        window.StateManager = window.StateManager || {};
+        window.PastPresentFuture = window.PastPresentFuture || {};
 
-        window.StateManager.Loading = factory(
+        window.PastPresentFuture.Loading = factory(
             window,
             window.jQuery,
-            window.StateManager.Util
+            window.PastPresentFuture.Util
         );
 
     }
@@ -420,8 +420,8 @@
     function init() {
 
         $window
-            .on( 'StateManager:LoadingReveal', reveal )
-            .on( 'StateManager:LoadingComplete', hide );
+            .on( 'PastPresentFuture:LoadingReveal', reveal )
+            .on( 'PastPresentFuture:LoadingComplete', hide );
 
     }
 
@@ -468,13 +468,13 @@
 
     } else {
 
-        window.StateManager = window.StateManager || {};
+        window.PastPresentFuture = window.PastPresentFuture || {};
 
-        window.StateManager.Ajax = factory(
+        window.PastPresentFuture.Ajax = factory(
             window,
             window.jQuery,
-            window.StateManager.Util,
-            window.StateManager.Config
+            window.PastPresentFuture.Util,
+            window.PastPresentFuture.Config
         );
 
     }
@@ -650,7 +650,7 @@
         $.each( validLinks, function () {
 
             $( this )
-                .on( 'click.StateManager', function ( event ) {
+                .on( 'click.PastPresentFuture', function ( event ) {
 
                     // Continue as normal for cmd clicks etc
                     if ( event.which === 2 || event.metaKey ) {
@@ -661,7 +661,7 @@
                         url = $this.attr( 'href' )
                     ;
 
-                    $window.trigger( 'StateManager:GotoUrl', [ url, {
+                    $window.trigger( 'PastPresentFuture:GotoUrl', [ url, {
                         url: url,
                         options: {
                             scrollPos: parseInt( $( document ).scrollTop(), 10 ),
@@ -721,14 +721,14 @@
 
     } else {
 
-        window.StateManager = window.StateManager || {};
+        window.PastPresentFuture = window.PastPresentFuture || {};
 
-        window.StateManager.Manager = factory(
+        window.PastPresentFuture.Manager = factory(
             window,
             window.jQuery,
-            window.StateManager.Util,
-            window.StateManager.Config,
-            window.StateManager.Ajax
+            window.PastPresentFuture.Util,
+            window.PastPresentFuture.Config,
+            window.PastPresentFuture.Ajax
         );
 
     }
@@ -803,7 +803,7 @@
                 popstate: true
             } );
 
-            $window.trigger( 'StateManager:PopState' );
+            $window.trigger( 'PastPresentFuture:PopState' );
 
         } );
 
@@ -828,7 +828,7 @@
             Util.setDocumentTitle( options.title );
             setWrappers();
 
-            $window.trigger( 'StateManager:RecordPageview', {
+            $window.trigger( 'PastPresentFuture:RecordPageview', {
                 url:   Util.currentStateUrl(),
                 title: options.title
             } );
@@ -836,7 +836,7 @@
 
         prefetchUpcomingUrls();
 
-        $window.trigger( 'StateManager:AfterInitState' );
+        $window.trigger( 'PastPresentFuture:AfterInitState' );
 
     }
 
@@ -877,7 +877,7 @@
 
         if ( Config.get( 'content' ) !== Config.get( 'ajaxContainer' ) ) {
 
-            $window.trigger( 'StateManager:BeforeTransition', {
+            $window.trigger( 'PastPresentFuture:BeforeTransition', {
                 contentHolder: $contentHolder,
                 ajaxContainer: $ajaxContainer
             } );
@@ -907,7 +907,7 @@
 
         if ( Config.get( 'content' ) !== Config.get( 'ajaxContainer' ) ) {
 
-            $window.trigger( 'StateManager:AnimateTransition', data );
+            $window.trigger( 'PastPresentFuture:AnimateTransition', data );
 
         } else {
 
@@ -927,12 +927,12 @@
         if ( isLoading ) {
 
             // reveal loading state
-            $window.trigger( 'StateManager:LoadingReveal' );
+            $window.trigger( 'PastPresentFuture:LoadingReveal' );
 
         } else {
 
             // hide loading state
-            $window.trigger( 'StateManager:LoadingComplete' );
+            $window.trigger( 'PastPresentFuture:LoadingComplete' );
 
         }
 
@@ -951,13 +951,13 @@
 
         // Do not navigate to the current URL.
         if ( window.location.href === Util.getAbsoluteUrl( url ) && ! options.popstate ) {
-            $window.trigger( 'StateManager:ResetPage' );
+            $window.trigger( 'PastPresentFuture:ResetPage' );
             return;
         }
 
         $window
-            .off( 'StateManager:FetchedData' )
-            .on( 'StateManager:FetchedData', function ( event, data ) {
+            .off( 'PastPresentFuture:FetchedData' )
+            .on( 'PastPresentFuture:FetchedData', function ( event, data ) {
 
                 // Only proceed for currently request url.
                 if ( data.url !== url ) {
@@ -967,15 +967,15 @@
                 if ( ! options.popstate ) {
                     // history.pushState has to happen before rendering.
                     // Otherwise the page title in the history gets messed up.
-                    $window.trigger( 'StateManager:PushState', options );
+                    $window.trigger( 'PastPresentFuture:PushState', options );
                 }
 
                 toggleLoading( false );
 
-                $window.trigger( 'StateManager:RenderUrl', data );
+                $window.trigger( 'PastPresentFuture:RenderUrl', data );
 
                 // Unbind window event.
-                $( this ).off( 'StateManager:FetchedData' );
+                $( this ).off( 'PastPresentFuture:FetchedData' );
 
             } );
 
@@ -986,7 +986,7 @@
                 // save the new data to the cache
                 data = saveCacheData( ajaxCache, xhr.requestUrl, data );
 
-                $window.trigger( 'StateManager:FetchedData', data );
+                $window.trigger( 'PastPresentFuture:FetchedData', data );
 
             }
         } );
@@ -1012,11 +1012,11 @@
         ;
 
         if ( data = checkCacheForData( ajaxCache.list, options.url ) ) {
-            return $window.trigger( 'StateManager:FetchedData', data );
+            return $window.trigger( 'PastPresentFuture:FetchedData', data );
         }
 
         if ( data = checkCacheForData( prefetchCache.list, options.url ) ) {
-            return $window.trigger( 'StateManager:FetchedData', data );
+            return $window.trigger( 'PastPresentFuture:FetchedData', data );
         }
 
         if ( data = checkCacheForData( ajaxQueue, options.url ) ) {
@@ -1063,7 +1063,7 @@
                 removeUrlFromAjaxQueue( url );
                 data = saveCacheData( prefetchCache, url, data );
 
-                $window.trigger( 'StateManager:FetchedData', data );
+                $window.trigger( 'PastPresentFuture:FetchedData', data );
             }
         } );
 
@@ -1151,11 +1151,11 @@
     function ajaxEventListener() {
 
         $window
-            .on( 'StateManager:GotoUrl', function ( event, url, options ) {
+            .on( 'PastPresentFuture:GotoUrl', function ( event, url, options ) {
                 gotoUrl( url, options );
             } )
-            .on( 'StateManager:RenderUrl', renderUrl )
-            .on( 'StateManager:InitState', function ( event, data ) {
+            .on( 'PastPresentFuture:RenderUrl', renderUrl )
+            .on( 'PastPresentFuture:InitState', function ( event, data ) {
                 initState( data );
             } )
         ;
@@ -1170,7 +1170,7 @@
 
 } ) );
 /**
- * Builds the StateManager prototype.
+ * Builds the PastPresentFuture prototype.
  * This file should be required directly for CommonJS usage.
  *
  * @see  http://requirejs.org/docs/commonjs.html#intro On CommonJS Transport.
@@ -1203,15 +1203,15 @@
 
     } else {
 
-        var _StateManager = window.StateManager;
+        var _PastPresentFuture = window.PastPresentFuture;
 
-        window.StateManager = factory(
-            _StateManager.Util,
-            _StateManager.Config,
-            _StateManager.PushState,
-            _StateManager.Loading,
-            _StateManager.Ajax,
-            _StateManager.Manager
+        window.PastPresentFuture = factory(
+            _PastPresentFuture.Util,
+            _PastPresentFuture.Config,
+            _PastPresentFuture.PushState,
+            _PastPresentFuture.Loading,
+            _PastPresentFuture.Ajax,
+            _PastPresentFuture.Manager
         );
 
     }
@@ -1221,11 +1221,11 @@
     'use strict';
 
     /**
-     * StateManager prototype.
+     * PastPresentFuture prototype.
      *
      * @param  {Object} newConfig Optional configuration for initialization.
      */
-    function StateManager( newConfig ) {
+    function PastPresentFuture( newConfig ) {
 
         newConfig = newConfig || false;
 
@@ -1236,7 +1236,7 @@
 
     }
 
-    var module = StateManager.prototype;
+    var module = PastPresentFuture.prototype;
 
     module.Util = Util;
     module.Config = Config;
@@ -1245,6 +1245,6 @@
     module.Ajax = Ajax;
     module.Manager = Manager;
 
-    return StateManager;
+    return PastPresentFuture;
 
 } ) );

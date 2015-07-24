@@ -24,12 +24,12 @@
 
     } else {
 
-        window.StateManager = window.StateManager || {};
+        window.PastPresentFuture = window.PastPresentFuture || {};
 
-        window.StateManager.PushState = factory(
+        window.PastPresentFuture.PushState = factory(
             window,
             window.jQuery,
-            window.StateManager.Util
+            window.PastPresentFuture.Util
         );
 
     }
@@ -51,8 +51,8 @@
     function init() {
 
         $window
-            .on( 'StateManager:AfterInitState', newState )
-            .on( 'StateManager:PushState', pushState )
+            .on( 'PastPresentFuture:AfterInitState', newState )
+            .on( 'PastPresentFuture:PushState', pushState )
         ;
 
     }
@@ -106,7 +106,7 @@
                 object.url
             );
 
-            $window.trigger( 'StateManager:NewState' );
+            $window.trigger( 'PastPresentFuture:NewState' );
 
         }
 

@@ -19,11 +19,11 @@
 
     } else {
 
-        window.StateManager = window.StateManager || {};
+        window.PastPresentFuture = window.PastPresentFuture || {};
 
-        window.StateManager.Config = factory(
+        window.PastPresentFuture.Config = factory(
             window.jQuery,
-            window.StateManager.Util
+            window.PastPresentFuture.Util
         );
 
     }
@@ -37,7 +37,7 @@
     /**
      * Initialize the config module.
      *
-     * @param  {Object} newConfig The StateManager config object.
+     * @param  {Object} newConfig The PastPresentFuture config object.
      */
     function init( newConfig ) {
 

@@ -22,9 +22,9 @@
 
     } else {
 
-        window.StateManager = window.StateManager || {};
+        window.PastPresentFuture = window.PastPresentFuture || {};
 
-        window.StateManager.Util = factory(
+        window.PastPresentFuture.Util = factory(
             window,
             window.jQuery
         );
