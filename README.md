@@ -4,7 +4,7 @@ A JavaScipt library for manipulating browser history with pushState and AJAX.
 
 ## Introduction
 
-StateManager is a JavaScript library for interacting with [history.pushState()](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history) while loading internal URLs with [AJAX](https://developer.mozilla.org/en-US/docs/AJAX). The goal is to maintain a single load of CSS and JS assets per user session, speeding up page changes to maintain more time on site per user with increased page views. Below you will find documentation on its configuration and usage.
+StateManager is a JavaScript library for interacting with [history.pushState()](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history) while loading internal URLs with [AJAX](https://developer.mozilla.org/en-US/docs/AJAX). The goal is to maintain a single load of CSS and JS assets per user session, speeding up page changes for time-on-site retention with increased page views. Below you will find documentation on its configuration and usage.
 
 - [Installation](#installation)
 - [Basic Usage](#basicusage)
@@ -271,7 +271,7 @@ Custom jQuery events prefixed with `StateManager`.
 
 ## `StateManager:ResetPage`
 
-**Description:** This event is fired when the app tries to reload the page it is already on. This is particularly useful if the current page has javascript elements that need to be reset.
+**Description:** This event is fired when the library tries to reload the page it is already on. This is particularly useful if the current page has javascript elements that need to be reset.
 
 [:arrow_up:](#events)
 
