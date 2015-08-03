@@ -110,7 +110,7 @@
                 popstate: true
             } );
 
-            $window.trigger( 'PastPresentFuture:PopState' );
+            $window.trigger( 'PastPresentFuture:PopState', event );
 
         } );
 
