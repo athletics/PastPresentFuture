@@ -744,6 +744,7 @@
         $ajaxContainer,
         $window = $( window ),
         $body = $( 'body' ),
+        initialPop = true,
         prefetchCache = {
             list: [],
             limit: null
@@ -795,15 +796,15 @@
         $window.on( 'popstate', function ( event ) {
 
             // Don't reload the current page if the popstate event is empty
-            if ( event.originalEvent.state === null ) {
+            if ( initialPop ) {
                 return;
             }
+
+            $window.trigger( 'PastPresentFuture:PopState', event );
 
             gotoUrl( Util.currentStateUrl(), {
                 popstate: true
             } );
-
-            $window.trigger( 'PastPresentFuture:PopState', event );
 
         } );
 
@@ -1152,7 +1153,11 @@
 
         $window
             .on( 'PastPresentFuture:GotoUrl', function ( event, url, options ) {
+
+                initialPop = false;
+
                 gotoUrl( url, options );
+
             } )
             .on( 'PastPresentFuture:RenderUrl', renderUrl )
             .on( 'PastPresentFuture:InitState', function ( event, data ) {
