@@ -106,11 +106,11 @@
                 return;
             }
 
+            $window.trigger( 'PastPresentFuture:PopState', event );
+
             gotoUrl( Util.currentStateUrl(), {
                 popstate: true
             } );
-
-            $window.trigger( 'PastPresentFuture:PopState', event );
 
         } );
 
