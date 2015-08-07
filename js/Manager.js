@@ -136,6 +136,10 @@
             Util.setDocumentTitle( options.title );
             setWrappers();
 
+            if ( typeof options.pageConfig == 'string' ){
+               $contentHolder.attr( 'data-page-config', options.pageConfig );
+            }
+
             $window.trigger( 'PastPresentFuture:RecordPageview', {
                 url:   Util.currentStateUrl(),
                 title: options.title
