@@ -3,7 +3,7 @@
  *
  * @author Athletics - http://athleticsnyc.com
  * @see https://github.com/athletics/PastPresentFuture
- * @version 0.1.4
+ * @version 0.1.5
  *//**
  * Shared utilities.
  */
@@ -828,6 +828,10 @@
         if ( ! options.isInitLoad ) {
             Util.setDocumentTitle( options.title );
             setWrappers();
+
+            if ( typeof options.pageConfig == 'string' ){
+               $contentHolder.attr( 'data-page-config', options.pageConfig );
+            }
 
             $window.trigger( 'PastPresentFuture:RecordPageview', {
                 url:   Util.currentStateUrl(),
