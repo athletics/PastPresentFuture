@@ -1,6 +1,6 @@
 {
   "name": "pastpresentfuture",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Where have we been? Where are we going?",
   "main": "src/Index.js",
   "repository": {
