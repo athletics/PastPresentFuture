@@ -278,9 +278,9 @@
                     $window.trigger( 'PastPresentFuture:PushState', options );
                 }
 
-                toggleLoading( false );
-
                 $window.trigger( 'PastPresentFuture:RenderUrl', data );
+
+                toggleLoading( false );
 
                 // Unbind window event.
                 $( this ).off( 'PastPresentFuture:FetchedData' );
