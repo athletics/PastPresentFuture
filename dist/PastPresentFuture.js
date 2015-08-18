@@ -3,7 +3,7 @@
  *
  * @author Athletics - http://athleticsnyc.com
  * @see https://github.com/athletics/PastPresentFuture
- * @version 0.1.6
+ * @version 0.1.5
  *//**
  * Shared utilities.
  */
@@ -102,7 +102,7 @@
             return 0;
         }
 
-        if ( typeof state.scrollTarget == 'number' ){
+        if ( $.isNumeric( state.scrollTarget ) ) {
             return state.scrollTarget;
         }
 

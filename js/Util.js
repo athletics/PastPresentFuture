@@ -96,7 +96,7 @@
             return 0;
         }
 
-        if ( typeof state.scrollTarget == 'number' ){
+        if ( $.isNumeric( state.scrollTarget ) ) {
             return state.scrollTarget;
         }
 
