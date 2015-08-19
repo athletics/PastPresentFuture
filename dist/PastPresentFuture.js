@@ -3,7 +3,7 @@
  *
  * @author Athletics - http://athleticsnyc.com
  * @see https://github.com/athletics/PastPresentFuture
- * @version 0.1.5
+ * @version 0.1.6
  *//**
  * Shared utilities.
  */
