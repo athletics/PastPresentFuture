@@ -96,6 +96,10 @@
             return 0;
         }
 
+        if ( $.isNumeric( state.scrollTarget ) ) {
+            return state.scrollTarget;
+        }
+
         var $target = $( state.scrollTarget );
 
         if ( ! $target.length ) {
