@@ -1,5 +1,7 @@
 # PastPresentFuture
 
+## THIS PROJECT IS ARCHIVED AND SET TO READ ONLY
+
 A JavaScipt library for manipulating browser history with pushState and AJAX.
 
 ## Introduction
